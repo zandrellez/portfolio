@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { projects } from "../../data/projects"
 
 export default function AllWorksSection() {
@@ -40,6 +41,15 @@ export default function AllWorksSection() {
 
   return (
     <section id="all-works" className="relative w-full bg-[#0a0a0a] text-white py-24 min-h-screen">
+      <div className="max-w-6xl mx-auto px-6 mb-12">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-mono text-white/60 hover:text-white transition-colors"
+        >
+          <span aria-hidden="true">←</span>
+          Back to portfolio
+        </Link>
+      </div>
       
       {/* 1. DYNAMIC IMPACT STATS */}
       <div className="max-w-6xl mx-auto px-6 mb-32 flex flex-col items-center">

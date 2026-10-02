@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Link } from "react-router-dom"
 import { projects } from "../../data/projects"
 
 export default function ProjectsSection() {
@@ -141,9 +142,9 @@ export default function ProjectsSection() {
             })}
             
             <div className="ml-auto flex items-center pr-2 pb-1">
-              <a href="#all-works" className="text-[10px] font-mono font-bold text-[#5fb57a] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-md hover:bg-white/10 border border-white/5 whitespace-nowrap">
+              <Link to="/all-works" className="text-[10px] font-mono font-bold text-[#5fb57a] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-md hover:bg-white/10 border border-white/5 whitespace-nowrap">
                 [ VIEW ALL ↗ ]
-              </a>
+              </Link>
             </div>
           </div>
 
