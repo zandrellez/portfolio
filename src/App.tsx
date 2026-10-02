@@ -5,6 +5,7 @@ import ImmersiveFullscreenNav from './components/ui/immersive-full-screen-nav'
 import AboutMe from './components/ui/about-me'
 import ProjectsSection from './components/ui/projects'
 import AllWorksSection from './components/ui/all-works'
+import ServicesAndTools from './components/ui/services'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -50,6 +51,7 @@ function HomePage() {
       />
       <AboutMe />
       <ProjectsSection />
+      <ServicesAndTools />
     </main>
   )
 }
