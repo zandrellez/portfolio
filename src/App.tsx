@@ -18,7 +18,7 @@ function App() {
   }, [])
 
   return (
-    <div className="relative min-h-screen w-full m-0 p-0 bg-[#ebebea] overflow-x-hidden">
+    <div className="relative min-h-screen w-full m-0 p-0 bg-[#ebebea] overflow-x-clip">
       {/* Global Immersive Navigation pinned to the absolute top-right of the window */}
       <div className="fixed top-0 right-0 z-50 p-6">
         <ImmersiveFullscreenNav 
