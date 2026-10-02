@@ -7,6 +7,7 @@ import ProjectsSection from './components/ui/projects'
 import AllWorksSection from './components/ui/all-works'
 import ServicesAndTools from './components/ui/services'
 import Processes from './components/ui/process'
+import CertificatesSection from './components/ui/certificates'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -54,6 +55,7 @@ function HomePage() {
       <ProjectsSection />
       <ServicesAndTools />
       <Processes />
+      <CertificatesSection />
     </main>
   )
 }
