@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import MascotHero from './components/ui/mascot-portfolio-hero'
 import ImmersiveFullscreenNav from './components/ui/immersive-full-screen-nav'
 import ProjectsSection from './components/ui/projects'
+import AllWorksSection from './components/ui/all-works'
 
 function App() {
   // Live clock for the "discipline" slot
@@ -64,7 +65,9 @@ function App() {
             // "Workflow Automation"
           ]}
         />
+        
         <ProjectsSection />
+        <AllWorksSection />
       </main>
     </div>
   )
