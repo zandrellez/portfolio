@@ -82,7 +82,7 @@ export default function ProjectsSection() {
     <section
       id="projects"
       ref={containerRef}
-      className="relative w-full bg-[#111111]"
+      className="relative w-full bg-[#fdfdf5] text-[#1a211b]"
       style={{ height: `${totalScrollStages * 100}svh` }}
     >
       <div className="sticky top-0 h-svh w-full flex items-center justify-center overflow-hidden">
@@ -96,19 +96,19 @@ export default function ProjectsSection() {
           }}
         >
           <div className="flex flex-col items-center font-sans tracking-tight">
-            <div className="bg-[#333333] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#ebebea] mb-1">
+            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] mb-1">
               Discover my latest work and
             </div>
-            <div className="bg-[#333333] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#ebebea] mb-1 -ml-8 md:-ml-12">
+            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] mb-1 -ml-8 md:-ml-12">
               creative solutions
             </div>
-            <div className="bg-[#333333] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#ebebea] ml-8 md:ml-12">
+            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] ml-8 md:ml-12">
               that bring ideas to life
             </div>
           </div>
-          <div className="absolute bottom-12 flex flex-col items-center gap-3 opacity-40">
-            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-white">Scroll to explore</span>
-            <svg className="w-4 h-4 text-white animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="absolute bottom-12 flex flex-col items-center gap-3 opacity-60">
+            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#1a211b]">Scroll to explore</span>
+            <svg className="w-4 h-4 text-[#1a211b] animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 9l6 6 6-6"/>
             </svg>
           </div>
@@ -116,13 +116,13 @@ export default function ProjectsSection() {
 
         {/* PHASE 2: The Browser Window */}
         <div 
-          className="relative z-10 w-[95%] md:w-[90%] max-w-[1400px] h-[85vh] flex flex-col rounded-xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] bg-[#0d1117] font-sans"
+          className="relative z-10 w-[95%] md:w-[90%] max-w-[1400px] h-[85vh] flex flex-col rounded-xl overflow-hidden border border-[#30363d] shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0d1117] font-sans"
           style={{ transform: `translateY(${scrollAnim.browserY}vh)` }}
         >
           
-          <div className="flex items-end bg-[#202124] px-2 pt-2 gap-1 overflow-x-auto no-scrollbar shrink-0">
+          <div className="flex items-end bg-[#010409] px-2 pt-2 gap-1 overflow-x-auto no-scrollbar shrink-0 border-b border-[#30363d]">
             
-            {/* DESKTOP: Appends new tabs to the right on scroll */}
+            {/* DESKTOP Tabs */}
             <div className="hidden md:flex items-end gap-1 flex-1">
               {featuredProjects.slice(0, openedTabs).map((proj, idx) => {
                 const isActive = activeTab === idx
@@ -130,13 +130,13 @@ export default function ProjectsSection() {
                   <button
                     key={proj.id}
                     onClick={() => scrollToTab(idx)}
-                    className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-white/5 animate-in slide-in-from-left-4 fade-in duration-300 ${
+                    className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-[#30363d] ${
                       isActive 
-                        ? "bg-[#35363a] text-white" 
-                        : "bg-transparent text-white/50 hover:bg-white/5 hover:text-white/80"
+                        ? "bg-[#161b22] text-[#e6edf3] font-medium border-t border-x border-[#30363d]" 
+                        : "bg-transparent text-[#7d8590] hover:bg-[#161b22]/50 hover:text-[#c9d1d9]"
                     }`}
                   >
-                    <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#5fb57a]' : 'bg-white/20'}`} />
+                    <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#93ab92]' : 'bg-[#30363d]'}`} />
                     <span className="truncate font-medium">WORKS {proj.id}</span>
                     {isActive && <span className="ml-auto opacity-50 hover:opacity-100 font-bold">×</span>}
                   </button>
@@ -144,34 +144,32 @@ export default function ProjectsSection() {
               })}
             </div>
 
-            {/* MOBILE: Always shows a single dynamic tab replacing itself */}
+            {/* MOBILE Tab */}
             <div className="flex md:hidden items-end flex-1">
-              <button
-                className="w-full max-w-[200px] px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs bg-[#35363a] text-white border-r border-white/5"
-              >
-                <span className="w-2 h-2 rounded-full bg-[#5fb57a]" />
-                <span className="truncate font-medium">WORKS {activeProject.id}</span>
+              <button className="w-full max-w-[200px] px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs bg-[#161b22] text-[#e6edf3] border-r border-t border-x border-[#30363d]">
+                <span className="w-2 h-2 rounded-full bg-[#93ab92]" />
+                <span className="truncate font-medium">WORKS {activeProject?.id || activeTab + 1}</span>
               </button>
             </div>
             
             <div className="ml-auto flex items-center pr-2 pb-1">
-              <Link to="/all-works" className="text-[10px] font-mono font-bold text-[#5fb57a] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-md hover:bg-white/10 border border-white/5 whitespace-nowrap">
+              <Link to="/all-works" className="text-[10px] font-mono font-bold text-[#93ab92] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-[#93ab92]/10 rounded-md hover:bg-[#93ab92]/20 border border-[#93ab92]/30 whitespace-nowrap">
                 [ VIEW ALL ↗ ]
               </Link>
             </div>
           </div>
 
           {/* Browser Address Bar */}
-          <div className="bg-[#35363a] px-4 py-2 flex items-center gap-4 border-b border-white/5 shrink-0">
-            <div className="flex items-center gap-4 text-white/60 text-lg select-none hidden md:flex">
-              <span className="cursor-pointer hover:text-white transition-colors">←</span>
-              <span className="cursor-pointer hover:text-white transition-colors opacity-40">→</span>
-              <span className="cursor-pointer hover:text-white transition-colors text-sm">↻</span>
+          <div className="bg-[#161b22] px-4 py-2 flex items-center gap-4 border-b border-[#30363d] shrink-0">
+            <div className="flex items-center gap-4 text-[#7d8590] text-lg select-none hidden md:flex">
+              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors">←</span>
+              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors opacity-40">→</span>
+              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors text-sm">↻</span>
             </div>
-            <div className="flex-1 bg-[#202124] rounded-full px-4 py-1.5 flex items-center gap-3 text-sm text-white/80 border border-white/5 transition-all">
+            <div className="flex-1 bg-[#0d1117] rounded-full px-4 py-1.5 flex items-center gap-3 text-sm text-[#e6edf3] border border-[#30363d] transition-all">
               <span className="text-xs">🔒</span>
               <span className="font-mono opacity-60 sm:inline">github.com/zandrellez/</span>
-              <span className="font-mono text-white transition-all duration-300">{activeProject?.slug}</span>
+              <span className="font-mono font-medium text-white transition-all duration-300">{activeProject?.slug}</span>
             </div>
           </div>
 

@@ -5,6 +5,7 @@ export type CertificateItem = {
   issuer: string;
   date: string;
   imageUrl: string;
+  link: string;
 };
 
 export const certificatesData: CertificateItem[] = [
@@ -15,6 +16,7 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Meta",
     date: "10/2025",
     imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop", 
+    link: "https://www.coursera.org/account/accomplishments/certificate/3Z7X9Y6J8K9L",
   },
   {
     id: "cert-2",
@@ -23,5 +25,6 @@ export const certificatesData: CertificateItem[] = [
     issuer: "Technological Institute of the Philippines",
     date: "06/2026",
     imageUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop",
+    link: "https://drive.google.com/file/d/1a2b3c4d5e6f7g8h9i0j/view?usp=sharing",
   },
 ];

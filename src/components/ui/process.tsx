@@ -64,10 +64,10 @@ export default function Process({
   phases = processPhases,
   imageUrl = processMeta.imageUrl,
   imageAlt = processMeta.imageAlt,
-  textColor = "#0a0a0a",
-  mutedTextColor = "#52525b",
-  activeColor = "#ff5f00",
-  backgroundColor = "#f4f3ec",
+  textColor = "#1a211b",
+  mutedTextColor = "#4b524d",
+  activeColor = "#93ab92",
+  backgroundColor = "#fdfdf5",
   duration = 1.2,
 }: ProcessProps) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -230,7 +230,6 @@ export default function Process({
   }, [count, normalizedDuration, reducedMotion, layoutKey]);
 
   const sectionStyle = {
-    color: textColor,
     backgroundColor,
     "--total": `calc(var(--pad) * 2 + var(--img) + var(--gap) + var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
     "--area": `calc(var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
@@ -238,13 +237,14 @@ export default function Process({
   } as CSSProperties;
 
   const activeStyle: CSSProperties = { backgroundColor: activeColor };
+  const titleStyle: CSSProperties = { color: textColor };
   const mutedStyle: CSSProperties = { color: mutedTextColor };
 
   return (
     <section
       ref={sectionRef}
       id="process"
-      className={`relative w-full ${LAYOUT_VARS}`}
+      className={`relative w-full border-t border-[#93ab92]/20 ${LAYOUT_VARS}`}
       style={sectionStyle}
     >
       <div className="sticky top-0 h-screen w-screen overflow-hidden pt-[10%] max-md:pt-[15%]">
@@ -292,14 +292,14 @@ export default function Process({
               className="absolute top-0 md:h-1/2 pr-[3vw] pt-[2vw] max-md:pr-0 max-md:pt-0"
               style={{ width: "var(--t-width)", left: "var(--t-left)" }}
             >
-              <h2 className="text-[2.6vw] font-medium leading-[0.95] max-md:text-[10vw]">
+              <h2 className="text-[2.6vw] font-bold leading-[0.95] max-md:text-[10vw]" style={titleStyle}>
                 {title}
               </h2>
               <p
-                className="mt-[1.5vw] text-[1.65vw] leading-none max-md:mt-[3vw] max-md:text-[4.5vw]"
+                className="mt-[1.5vw] text-[16px] uppercase tracking-widest max-md:mt-[3vw]"
                 style={mutedStyle}
               >
-                {periodLabel}
+                // {periodLabel}
               </p>
             </div>
 
@@ -355,13 +355,14 @@ export default function Process({
                   >
                     <h4
                       data-title
-                      className="text-[2.2vw] leading-none max-md:text-[6.5vw]"
+                      className="text-[2.2vw] font-bold leading-tight max-md:text-[6.5vw]"
+                      style={titleStyle}
                     >
-                      {`${number} - ${phase.title}`}
+                      {number} <span style={{ opacity: 0.4 }}>&mdash;</span> {phase.title}
                     </h4>
                     <p
                       data-desc
-                      className="w-[90%] text-[1.5vw] leading-[1.15] max-md:text-[4vw] max-md:w-full"
+                      className="w-[90%] text-[16px] leading-[1.6] max-md:text-[14px] max-md:w-full"
                       style={mutedStyle}
                     >
                       {phase.description}

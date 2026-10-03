@@ -79,28 +79,28 @@ export default function AboutMe() {
     <section className="about-me">
       <style>{`
         .about-me {
-          --paper: #f4f3ec;
-          --ink: #111111;
+          --paper: #fdfdf5;
+          --ink: #1a211b;
           --muted: #93ab92;
-          --line: rgba(17, 17, 17, 0.15);
+          --line: rgba(147, 171, 146, 0.25);
 
           position: relative;
           width: 100%;
           min-height: 100vh;
           background: var(--paper);
           color: var(--ink);
-          font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-family: var(--sans, system-ui, sans-serif);
           -webkit-font-smoothing: antialiased;
         }
 
-        /* Subtle Grid Pattern matching Hero */
+        /* Subtle Grid Pattern */
         .about-me::before {
           content: "";
           position: absolute;
           inset: 0;
           pointer-events: none;
-          opacity: 0.12;
-          background-image: radial-gradient(#111111 1px, transparent 1px);
+          opacity: 0.08;
+          background-image: radial-gradient(#93ab92 1px, transparent 1px);
           background-size: 32px 32px;
           z-index: 1;
           background-attachment: fixed;
@@ -138,7 +138,8 @@ export default function AboutMe() {
           top: -1.7rem;
           z-index: 20;
           margin: 0;
-          font-size: 9px;
+          font-family: var(--mono, monospace);
+          font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.22em;
           text-transform: uppercase;
@@ -155,7 +156,7 @@ export default function AboutMe() {
           background: #111;
           border-radius: 1rem;
           isolation: isolate;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .about-image {
@@ -174,29 +175,6 @@ export default function AboutMe() {
           transform: scale(1);
         }
 
-        .about-card-caption {
-          position: absolute;
-          left: 1.2rem;
-          bottom: 1.2rem;
-          z-index: 10;
-          color: white;
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-          text-shadow: 0 1px 12px rgba(0,0,0,0.4);
-        }
-
-        .about-card-caption span {
-          display: block;
-          margin-bottom: 3px;
-          font-size: 7px;
-          font-weight: 700;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          opacity: 0.85;
-          color: #5fb57a;
-        }
-
         .about-clip {
           --name-size: clamp(2.8rem, 4.8vw, 4.8rem);
           --clip-gap: 5rem;
@@ -210,7 +188,7 @@ export default function AboutMe() {
           );
           pointer-events: none;
           background-color: var(--paper);
-          background-image: radial-gradient(rgba(17, 17, 17, 0.12) 1px, transparent 1px);
+          background-image: radial-gradient(rgba(147, 171, 146, 0.15) 1px, transparent 1px);
           background-size: 32px 32px;
           background-attachment: fixed;
           -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
@@ -228,12 +206,12 @@ export default function AboutMe() {
 
         .about-name-text {
           margin: 0;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-family: var(--sans, sans-serif);
           font-size: clamp(2.8rem, 4.8vw, 4.8rem);
           font-weight: 700;
           letter-spacing: -0.06em;
-          color: #ffffff;
-          text-shadow: 0 3px 20px rgba(0, 0, 0, 0.75), 0 1px 5px rgba(0, 0, 0, 0.9);
+          color: var(--ink);
+          text-shadow: 0 2px 10px rgba(253, 253, 245, 0.8);
           white-space: nowrap;
         }
 
@@ -247,7 +225,7 @@ export default function AboutMe() {
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 1px solid var(--ink);
+          border: 1px solid var(--muted);
           border-radius: 50%;
           background: var(--paper);
           color: var(--ink);
@@ -257,39 +235,14 @@ export default function AboutMe() {
         }
 
         .about-arrow:hover {
-          background: var(--ink);
-          color: var(--paper);
+          background: var(--muted);
+          color: #fff;
           transform: translateX(-50%) scale(1.08);
         }
 
         .about-arrow svg {
           width: 14px;
           height: 14px;
-        }
-
-        .about-carousel-indicator {
-          position: absolute;
-          left: 78%;
-          bottom: 1rem;
-          z-index: 20;
-          display: flex;
-          gap: 4px;
-          transform: translateX(-50%);
-        }
-
-        .about-carousel-dot {
-          width: 16px;
-          height: 2px;
-          padding: 0;
-          border: 0;
-          background: rgba(255,255,255,0.4);
-          cursor: pointer;
-          transition: width 0.4s ease, background 0.3s ease;
-        }
-
-        .about-carousel-dot[data-active="true"] {
-          width: 28px;
-          background: white;
         }
 
         .about-content {
@@ -306,7 +259,8 @@ export default function AboutMe() {
 
         .about-intro-label {
           margin-bottom: 0.8rem;
-          font-size: 9px;
+          font-family: var(--mono, monospace);
+          font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.18em;
           text-transform: uppercase;
@@ -316,7 +270,7 @@ export default function AboutMe() {
         .about-intro-title {
           max-width: 440px;
           margin: 0;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-family: var(--sans, sans-serif);
           font-size: clamp(2rem, 3.8vw, 3.8rem);
           font-weight: 400;
           line-height: 0.95;
@@ -335,10 +289,6 @@ export default function AboutMe() {
           border-top: 1px solid var(--line);
         }
 
-        .about-story:first-of-type {
-          border-top: 1px solid var(--line);
-        }
-
         .about-story-header {
           display: flex;
           align-items: center;
@@ -347,40 +297,28 @@ export default function AboutMe() {
         }
 
         .about-story-number {
-          font-size: 9px;
+          font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.14em;
           color: var(--muted);
-          font-family: monospace;
+          font-family: var(--mono, monospace);
         }
 
         .about-story-line {
           width: 28px;
           height: 1px;
-          background: var(--ink);
-        }
-
-        .about-story-title {
-          margin: 0;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-          font-weight: 500;
-          line-height: 1;
-          letter-spacing: -0.03em;
+          background: var(--muted);
         }
 
         .about-story-description {
           max-width: 560px;
           margin: 0.8rem 0 0 0;
-          font-size: clamp(14px, 1.1vw, 16px);
+          font-size: 16px;
           font-weight: 400;
-          line-height: 1.7;
-          color: #333333;
+          line-height: 1.6;
+          color: var(--ink);
         }
 
-        /* ---------------------------------------------------- */
-        /* MOBILE OVERRIDES (Responsive Fixes)                  */
-        /* ---------------------------------------------------- */
         @media (max-width: 900px) {
           .about-clip {
             display: none;
@@ -393,10 +331,10 @@ export default function AboutMe() {
           }
 
           .about-visual {
-            position: relative; /* Replaces sticky */
+            position: relative;
             top: auto;
             height: auto;
-            padding: 4rem 1.5rem 2rem; /* Normal spacing for top stack */
+            padding: 4rem 1.5rem 2rem;
             display: block;
           }
 
@@ -404,28 +342,24 @@ export default function AboutMe() {
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
-            aspect-ratio: 1; /* Makes the image space square on mobile */
+            aspect-ratio: 1;
           }
 
-          /* Let the image take up the full width of the mobile container */
           .about-carousel {
             width: 100%;
             height: 100%;
           }
 
-          /* Tuck the large name neatly under the image edge */
           .about-name {
             top: auto;
             bottom: -1rem;
             left: 1rem;
           }
 
-          /* Shrink name font slightly to fit smaller screens */
           .about-name-text {
-            font-size: clamp(1.8rem, 8vw, 2.8rem);
+            font-size: clamp(1.8rem, 7vw, 2.8rem);
           }
 
-          /* Move arrow to the bottom right corner over the image */
           .about-arrow {
             left: auto;
             right: 1.5rem;
@@ -434,20 +368,9 @@ export default function AboutMe() {
             transform: none; 
           }
 
-          .about-arrow:hover {
-            transform: scale(1.08); /* Reset hover transform */
-          }
-
-          /* Move indicator dots to the bottom left inside the image */
-          .about-carousel-indicator {
-            left: 1.5rem;
-            bottom: 1.5rem;
-            transform: none;
-          }
-
           .about-content {
-            margin-left: 0; /* RESETS the massive negative overlap margin */
-            padding: 3rem 1.5rem 6rem; /* Standard mobile padding */
+            margin-left: 0;
+            padding: 3rem 1.5rem 6rem;
           }
 
           .about-intro-title {
@@ -458,12 +381,10 @@ export default function AboutMe() {
 
       <div className="about-layout">
 
-        {/* LEFT STICKY AREA (Scrolls naturally on Mobile) */}
         <aside className="about-visual">
           <div className="about-visual-inner">
             <p className="about-label">Software Engineer</p>
 
-            {/* IMAGE CAROUSEL */}
             <div
               className="about-carousel"
               onMouseEnter={() => setIsPaused(true)}
@@ -483,12 +404,10 @@ export default function AboutMe() {
 
             <div className="about-clip" aria-hidden="true" />
 
-            {/* LARGER ONE-LINE NAME WITH DROP SHADOW */}
             <div className="about-name">
               <h2 className="about-name-text">Zoe Andrelle Zamora</h2>
             </div>
 
-            {/* CIRCLE ARROW */}
             <button
               type="button"
               className="about-arrow"
@@ -508,7 +427,6 @@ export default function AboutMe() {
           </div>
         </aside>
 
-        {/* RIGHT SCROLLING STORY (Stacks below on Mobile) */}
         <main className="about-content">
           <div className="about-intro">
             <span className="about-intro-label">// The Manifesto</span>
