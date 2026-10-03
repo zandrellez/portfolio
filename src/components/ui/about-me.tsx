@@ -292,7 +292,6 @@ export default function AboutMe() {
           background: white;
         }
 
-        /* Pushed down further so the entire text block sits right inside your pink box */
         .about-content {
           padding: clamp(22rem, 24vh, 20rem) 0 15vh;
           margin-left: -12rem;
@@ -331,7 +330,6 @@ export default function AboutMe() {
           font-weight: 700;
         }
 
-        /* Story sections stacked cleanly inside the target box */
         .about-story {
           padding: 2.5rem 0;
           border-top: 1px solid var(--line);
@@ -380,39 +378,87 @@ export default function AboutMe() {
           color: #333333;
         }
 
+        /* ---------------------------------------------------- */
+        /* MOBILE OVERRIDES (Responsive Fixes)                  */
+        /* ---------------------------------------------------- */
         @media (max-width: 900px) {
+          .about-clip {
+            display: none;
+          }
 
-        .about-clip {
-          display: none;
-        }
           .about-layout {
             grid-template-columns: 1fr;
             gap: 0;
+            width: 100%;
           }
 
           .about-visual {
-            position: sticky;
-            top: 0;
-            height: 85svh;
-            min-height: 440px;
-            z-index: 5;
-            background: var(--paper);
+            position: relative; /* Replaces sticky */
+            top: auto;
+            height: auto;
+            padding: 4rem 1.5rem 2rem; /* Normal spacing for top stack */
+            display: block;
           }
 
           .about-visual-inner {
-            width: min(92%, 440px);
-            aspect-ratio: 0.9;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            aspect-ratio: 1; /* Makes the image space square on mobile */
+          }
+
+          /* Let the image take up the full width of the mobile container */
+          .about-carousel {
+            width: 100%;
+            height: 100%;
+          }
+
+          /* Tuck the large name neatly under the image edge */
+          .about-name {
+            top: auto;
+            bottom: -1rem;
+            left: 1rem;
+          }
+
+          /* Shrink name font slightly to fit smaller screens */
+          .about-name-text {
+            font-size: clamp(1.8rem, 8vw, 2.8rem);
+          }
+
+          /* Move arrow to the bottom right corner over the image */
+          .about-arrow {
+            left: auto;
+            right: 1.5rem;
+            top: auto;
+            bottom: 1.5rem;
+            transform: none; 
+          }
+
+          .about-arrow:hover {
+            transform: scale(1.08); /* Reset hover transform */
+          }
+
+          /* Move indicator dots to the bottom left inside the image */
+          .about-carousel-indicator {
+            left: 1.5rem;
+            bottom: 1.5rem;
+            transform: none;
           }
 
           .about-content {
-            padding: 4rem 6% 12vh;
+            margin-left: 0; /* RESETS the massive negative overlap margin */
+            padding: 3rem 1.5rem 6rem; /* Standard mobile padding */
+          }
+
+          .about-intro-title {
+            font-size: clamp(2rem, 8vw, 2.8rem);
           }
         }
       `}</style>
 
       <div className="about-layout">
 
-        {/* LEFT STICKY AREA */}
+        {/* LEFT STICKY AREA (Scrolls naturally on Mobile) */}
         <aside className="about-visual">
           <div className="about-visual-inner">
             <p className="about-label">Software Engineer</p>
@@ -431,13 +477,6 @@ export default function AboutMe() {
                     className="about-image"
                     data-active={index === currentImage}
                   />
-
-                  {index === currentImage && (
-                    <div className="about-card-caption">
-                      <span>0{index + 1} / 0{carouselImages.length}</span>
-                      {image.title}
-                    </div>
-                  )}
                 </React.Fragment>
               ))}
             </div>
@@ -469,7 +508,7 @@ export default function AboutMe() {
           </div>
         </aside>
 
-        {/* RIGHT SCROLLING STORY */}
+        {/* RIGHT SCROLLING STORY (Stacks below on Mobile) */}
         <main className="about-content">
           <div className="about-intro">
             <span className="about-intro-label">// The Manifesto</span>

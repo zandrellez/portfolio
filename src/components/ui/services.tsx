@@ -22,10 +22,7 @@ type CubeSide = {
 
 type Service = (typeof services)[number]
 
-/* -------------------------------------------------------------------------- */
-/*                                   HELPERS                                  */
-/* -------------------------------------------------------------------------- */
-
+// Helpers
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
@@ -66,10 +63,7 @@ function getTransform(
   }
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                  ICONS                                     */
-/* -------------------------------------------------------------------------- */
-
+// Icons
 function getTechIcon(name: string) {
   const value = name.toLowerCase()
 
@@ -90,10 +84,7 @@ function getTechIcon(name: string) {
   return <Cpu />
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                CUBE FACE                                   */
-/* -------------------------------------------------------------------------- */
-
+// Cube face
 function CubeFace({
   face,
   transform,
@@ -123,10 +114,7 @@ function CubeFace({
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                3D CUBE                                    */
-/* -------------------------------------------------------------------------- */
-
+// 3d cube
 function ServiceCube({
   service,
   reverse = false,
@@ -137,15 +125,14 @@ function ServiceCube({
   const faces = service.cube
 
   return (
-    <div className="relative flex h-[280px] w-[280px] items-center justify-center sm:h-[340px] sm:w-[340px]">
-      <div className="absolute h-[180px] w-[180px] rounded-full bg-white/[0.035] blur-3xl" />
+    <div className="relative flex h-[200px] w-[200px] items-center justify-center sm:h-[260px] sm:w-[260px] lg:h-[340px] lg:w-[340px]">
+      <div className="absolute h-[140px] w-[140px] rounded-full bg-white/[0.035] blur-3xl" />
 
       <div
-        className="relative h-[190px] w-[190px] sm:h-[230px] sm:w-[230px]"
+        className="relative h-[140px] w-[140px] sm:h-[180px] sm:w-[180px] lg:h-[230px] lg:w-[230px]"
         style={{ perspective: "1000px" }}
       >
         <style>{`
-          /* Adding 360 degrees to both the X and Y axes creates a seamless 3D tumble */
           @keyframes spin-cube {
             0% { transform: rotateX(-18deg) rotateY(0deg); }
             100% { transform: rotateX(342deg) rotateY(360deg); }
@@ -160,7 +147,6 @@ function ServiceCube({
           className="absolute inset-0"
           style={{
             transformStyle: "preserve-3d",
-            /* Reduced from 20s to 12s for a faster, dynamic spin */
             animation: reverse 
               ? "spin-cube-reverse 12s linear infinite" 
               : "spin-cube 12s linear infinite"
@@ -178,43 +164,40 @@ function ServiceCube({
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              SERVICE CONTENT                               */
-/* -------------------------------------------------------------------------- */
-
+// Service content
 function ServiceContent({
   service,
 }: {
   service: Service
 }) {
   return (
-    <div className="flex h-full w-full max-w-[620px] flex-col justify-center px-6 py-12 sm:px-10">
-      <div className="mb-5 flex items-center gap-3">
+    <div className="flex h-full w-full max-w-[620px] flex-col justify-center px-4 py-6 sm:px-10 lg:py-12">
+      <div className="mb-3 lg:mb-5 flex items-center gap-3">
         <span className="h-px w-8 bg-white/30" />
         <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-white/40">
           Service
         </span>
       </div>
 
-      <h2 className="max-w-xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+      <h2 className="max-w-xl text-2xl sm:text-4xl lg:text-6xl font-semibold tracking-tight text-white">
         {service.title}
       </h2>
 
-      <p className="mt-5 max-w-lg text-sm leading-6 text-white/45 sm:text-base">
+      <p className="mt-3 lg:mt-5 max-w-lg text-xs sm:text-sm lg:text-base leading-6 text-white/45">
         {service.subtitle}
       </p>
 
-      <div className="mt-8 space-y-5">
+      <div className="mt-5 lg:mt-8 space-y-3 lg:space-y-5">
         {service.slots.map((slot, index) => (
-          <div key={slot.title} className="group flex gap-4">
+          <div key={slot.title} className="group flex gap-3 lg:gap-4">
             <span className="mt-1 text-[10px] font-medium tracking-[0.2em] text-white/25">
               0{index + 1}
             </span>
             <div>
-              <h3 className="text-sm font-medium text-white">
+              <h3 className="text-xs sm:text-sm font-medium text-white">
                 {slot.title}
               </h3>
-              <p className="mt-1.5 max-w-md text-xs leading-5 text-white/40 sm:text-sm">
+              <p className="mt-1 max-w-md text-[11px] sm:text-xs lg:text-sm leading-5 text-white/40">
                 {slot.description}
               </p>
             </div>
@@ -225,10 +208,7 @@ function ServiceContent({
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              MARQUEE ROW                                   */
-/* -------------------------------------------------------------------------- */
-
+// Marquee row
 function MarqueeRow({
   items,
   reverse = false,
@@ -236,7 +216,6 @@ function MarqueeRow({
   items: string[]
   reverse?: boolean
 }) {
-  // Triple the items to ensure seamless endless scrolling without empty gaps
   const repeated = [...items, ...items, ...items]
 
   return (
@@ -281,10 +260,7 @@ function MarqueeRow({
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/*                              SERVICES SECTION                              */
-/* -------------------------------------------------------------------------- */
-
+// Services section
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLDivElement | null>(null)
   const [progress, setProgress] = useState(0)
@@ -304,17 +280,12 @@ export default function ServicesSection() {
 
         const rawProgress = -rect.top / scrollableHeight
         
-        // --- THE SCROLL LOCK LOGIC ---
-        // 0.0 to 0.3: Locked on Service 1
-        // 0.3 to 0.7: Transitioning
-        // 0.7 to 1.0: Locked on Service 2
         let lockedProgress = 0
         if (rawProgress < 0.3) {
           lockedProgress = 0
         } else if (rawProgress > 0.7) {
           lockedProgress = 1
         } else {
-          // Calculate the smooth transition in the middle
           lockedProgress = (rawProgress - 0.3) / 0.4
         }
 
@@ -336,17 +307,26 @@ export default function ServicesSection() {
   const firstService = services[0]
   const secondService = services[1]
 
+  // Desktop transforms
   const firstCubeStyle = getTransform(progress, "left", false)
   const firstContentStyle = getTransform(progress, "right", false)
   const secondContentStyle = getTransform(progress, "left", true)
   const secondCubeStyle = getTransform(progress, "right", true)
 
+  // Mobile transforms (Service 1 Cube exits right, Text exits left. Service 2 Cube enters left, Text enters right)
+  const mobileDistance = 100 // vw
+  const mCube1X = progress * mobileDistance
+  const mText1X = progress * -mobileDistance
+  const mCube2X = (progress - 1) * mobileDistance
+  const mText2X = (progress - 1) * -mobileDistance
+
+  const mFirstOpacity = clamp(1 - progress * 1.8, 0, 1)
+  const mSecondOpacity = clamp(progress * 1.8, 0, 1)
+
   return (
     <section className="bg-[#0a0a0a]">
       
-      {/* ------------------------------------------------------------------ */}
-      {/* STICKY STAGE (Cubes & Service Details)                             */}
-      {/* ------------------------------------------------------------------ */}
+      {/* SHARED STICKY STAGE */}
       <div ref={sectionRef} className="relative h-[250vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
           <div className="pointer-events-none absolute inset-0">
@@ -355,9 +335,69 @@ export default function ServicesSection() {
 
           <div className="relative mx-auto h-full max-w-7xl px-5 sm:px-8 lg:px-12">
             
-            {/* SERVICE 1 */}
+
+            {/* (mobile view) SERVICE 1 cube */}
             <div
-              className="absolute inset-y-0 left-0 flex w-full items-center justify-center lg:w-1/2"
+              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center pointer-events-none"
+              style={{
+                transform: `translate3d(${mCube1X}vw, -22vh, 0)`,
+                opacity: mFirstOpacity,
+                willChange: "transform, opacity",
+              }}
+            >
+              <div className="pointer-events-auto">
+                <ServiceCube service={firstService} />
+              </div>
+            </div>
+
+            {/* (mobile view) SERVICE 1 content */}
+            <div
+              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center overflow-y-auto pointer-events-none"
+              style={{
+                transform: `translate3d(${mText1X}vw, 20vh, 0)`,
+                opacity: mFirstOpacity,
+                pointerEvents: progress > 0.5 ? "none" : "auto",
+                willChange: "transform, opacity",
+              }}
+            >
+              <div className="pointer-events-auto w-full max-w-lg px-4">
+                <ServiceContent service={firstService} />
+              </div>
+            </div>
+
+            {/* (mobile view) SERVICE 2 content */}
+            <div
+              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center overflow-y-auto pointer-events-none"
+              style={{
+                transform: `translate3d(${mText2X}vw, 20vh, 0)`,
+                opacity: mSecondOpacity,
+                pointerEvents: progress < 0.5 ? "none" : "auto",
+                willChange: "transform, opacity",
+              }}
+            >
+              <div className="pointer-events-auto w-full max-w-lg px-4">
+                <ServiceContent service={secondService} />
+              </div>
+            </div>
+
+            {/* (mobile view) SERVICE 2 cube */}
+            <div
+              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center pointer-events-none"
+              style={{
+                transform: `translate3d(${mCube2X}vw, -22vh, 0)`,
+                opacity: mSecondOpacity,
+                willChange: "transform, opacity",
+              }}
+            >
+              <div className="pointer-events-auto">
+                <ServiceCube service={secondService} reverse />
+              </div>
+            </div>
+
+
+            {/* (desktop view) SERVICE 1 CUBE */}
+            <div
+              className="absolute inset-y-0 left-0 hidden lg:flex w-1/2 items-center justify-center"
               style={{
                 ...firstCubeStyle,
                 pointerEvents: progress > 0.5 ? "none" : "auto",
@@ -367,8 +407,9 @@ export default function ServicesSection() {
               <ServiceCube service={firstService} />
             </div>
 
+            {/* (desktop view) SERVICE 1 CONTENT */}
             <div
-              className="absolute inset-y-0 right-0 flex w-full items-center justify-center lg:w-1/2"
+              className="absolute inset-y-0 right-0 hidden lg:flex w-1/2 items-center justify-center"
               style={{
                 ...firstContentStyle,
                 pointerEvents: progress > 0.5 ? "none" : "auto",
@@ -378,9 +419,9 @@ export default function ServicesSection() {
               <ServiceContent service={firstService} />
             </div>
 
-            {/* SERVICE 2 */}
+            {/* (desktop view) SERVICE 2 CONTENT */}
             <div
-              className="absolute inset-y-0 left-0 flex w-full items-center justify-center lg:w-1/2"
+              className="absolute inset-y-0 left-0 hidden lg:flex w-1/2 items-center justify-center"
               style={{
                 ...secondContentStyle,
                 pointerEvents: progress < 0.5 ? "none" : "auto",
@@ -390,8 +431,9 @@ export default function ServicesSection() {
               <ServiceContent service={secondService} />
             </div>
 
+            {/* (desktop view) SERVICE 2 CUBE */}
             <div
-              className="absolute inset-y-0 right-0 flex w-full items-center justify-center lg:w-1/2"
+              className="absolute inset-y-0 right-0 hidden lg:flex w-1/2 items-center justify-center"
               style={{
                 ...secondCubeStyle,
                 pointerEvents: progress < 0.5 ? "none" : "auto",
@@ -400,25 +442,21 @@ export default function ServicesSection() {
             >
               <ServiceCube service={secondService} reverse />
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* NORMAL FLOW SECTION (Text Buffer + Marquee)                        */}
-      {/* ------------------------------------------------------------------ */}
       <div className="relative py-24 sm:py-32">
-        {/* Intro Text Buffer matching reference image layout */}
         <div className="mx-auto mb-16 max-w-4xl px-6 text-center">
-          <h2 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-7xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-7xl">
             Engineered with technologies powering
           </h2>
-          <p className="mt-6 text-lg leading-8 text-white/50 sm:text-xl">
+          <p className="mt-6 text-base leading-8 text-white/50 sm:text-xl">
             Integrating the modern ecosystem driving today's most ambitious scalable products.
           </p>
         </div>
 
-        {/* Marquee Tools */}
         <div className="w-full space-y-8 sm:space-y-12">
           <MarqueeRow items={marqueeTools.row1} />
           <MarqueeRow items={marqueeTools.row2} reverse />

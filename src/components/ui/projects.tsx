@@ -120,26 +120,39 @@ export default function ProjectsSection() {
           style={{ transform: `translateY(${scrollAnim.browserY}vh)` }}
         >
           
-          {/* Browser Tab Bar */}
           <div className="flex items-end bg-[#202124] px-2 pt-2 gap-1 overflow-x-auto no-scrollbar shrink-0">
-            {featuredProjects.slice(0, openedTabs).map((proj, idx) => {
-              const isActive = activeTab === idx
-              return (
-                <button
-                  key={proj.id}
-                  onClick={() => scrollToTab(idx)}
-                  className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-white/5 animate-in slide-in-from-left-4 fade-in duration-300 ${
-                    isActive 
-                      ? "bg-[#35363a] text-white" 
-                      : "bg-transparent text-white/50 hover:bg-white/5 hover:text-white/80"
-                  }`}
-                >
-                  <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#5fb57a]' : 'bg-white/20'}`} />
-                  <span className="truncate font-medium">WORKS {proj.id}</span>
-                  {isActive && <span className="ml-auto opacity-50 hover:opacity-100 font-bold">×</span>}
-                </button>
-              )
-            })}
+            
+            {/* DESKTOP: Appends new tabs to the right on scroll */}
+            <div className="hidden md:flex items-end gap-1 flex-1">
+              {featuredProjects.slice(0, openedTabs).map((proj, idx) => {
+                const isActive = activeTab === idx
+                return (
+                  <button
+                    key={proj.id}
+                    onClick={() => scrollToTab(idx)}
+                    className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-white/5 animate-in slide-in-from-left-4 fade-in duration-300 ${
+                      isActive 
+                        ? "bg-[#35363a] text-white" 
+                        : "bg-transparent text-white/50 hover:bg-white/5 hover:text-white/80"
+                    }`}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#5fb57a]' : 'bg-white/20'}`} />
+                    <span className="truncate font-medium">WORKS {proj.id}</span>
+                    {isActive && <span className="ml-auto opacity-50 hover:opacity-100 font-bold">×</span>}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* MOBILE: Always shows a single dynamic tab replacing itself */}
+            <div className="flex md:hidden items-end flex-1">
+              <button
+                className="w-full max-w-[200px] px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs bg-[#35363a] text-white border-r border-white/5"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#5fb57a]" />
+                <span className="truncate font-medium">WORKS {activeProject.id}</span>
+              </button>
+            </div>
             
             <div className="ml-auto flex items-center pr-2 pb-1">
               <Link to="/all-works" className="text-[10px] font-mono font-bold text-[#5fb57a] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-md hover:bg-white/10 border border-white/5 whitespace-nowrap">
@@ -157,12 +170,12 @@ export default function ProjectsSection() {
             </div>
             <div className="flex-1 bg-[#202124] rounded-full px-4 py-1.5 flex items-center gap-3 text-sm text-white/80 border border-white/5 transition-all">
               <span className="text-xs">🔒</span>
-              <span className="font-mono opacity-60 hidden sm:inline">github.com/zandrellez/</span>
+              <span className="font-mono opacity-60 sm:inline">github.com/zandrellez/</span>
               <span className="font-mono text-white transition-all duration-300">{activeProject?.slug}</span>
             </div>
           </div>
 
-          {/* GitHub Repository Content Area - Removed internal scrolling */}
+          {/* GitHub Repository Content Area */}
           <div className="relative flex-1 bg-[#0d1117] overflow-hidden flex">
             {featuredProjects.map((proj, idx) => {
               const isActive = activeTab === idx
@@ -182,19 +195,33 @@ export default function ProjectsSection() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] transition-colors cursor-pointer">
-                        ⭐ Star
-                      </button>
-                      <button className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] transition-colors cursor-pointer hidden sm:block">
-                        🍴 Fork
-                      </button>
+                      <a 
+                        href={proj.links.live} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] hover:text-white transition-colors flex items-center gap-1.5"
+                      >
+                        <span>Live</span>
+                        <svg className="w-3.5 h-3.5 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                        </svg>
+                      </a>
+                      <a 
+                        href={proj.links.github || `https://github.com/zandrellez/${proj.slug}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] hover:text-white transition-colors flex items-center gap-1.5"
+                      >
+                        <span>GitHub</span>
+                        <svg className="w-3.5 h-3.5 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                          <path d="M9 18c-4.51 2-5-2-7-2"/>
+                        </svg>
+                      </a>
                     </div>
                   </div>
 
-                  {/* README Card - Stretches to the bottom, borders removed */}
                   <div className="flex-1 flex flex-col mx-4 md:mx-6 mb-4 md:mb-6 rounded-md bg-[#0a0d13]">
-                    
-                    {/* Readme Header */}
                     <div className="px-4 py-2 border-b border-[#30363d] font-semibold text-xs bg-[#161b22] flex flex-wrap items-center justify-between gap-4 text-[#e6edf3] shrink-0 rounded-t-md">
                       <div className="flex items-center gap-2">
                          <span className="text-[#8b949e]">☰</span> README.md
@@ -212,76 +239,68 @@ export default function ProjectsSection() {
                       </div>
                     </div>
 
-                    {/* Readme Body - 3-Column Dashboard Layout */}
-                    <div className="flex-1 p-4 md:p-8 flex flex-col justify-center">
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+                    {/* Readme Body */}
+                    <div className="flex-1 p-6 md:p-10 flex flex-col justify-center my-auto">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                         
-                        {/* COLUMN 1 (Left - ~33%): The Media - Border removed */}
-                        <div className="lg:col-span-4 w-full aspect-[4/3] rounded-lg overflow-hidden flex items-center justify-center">
-                          <img 
-                            src={proj.image} 
-                            alt={proj.title} 
-                            className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500" 
-                          />
-                        </div>
-                        
-                        {/* COLUMN 2 (Center - ~42%): The Narrative */}
-                        <div className="lg:col-span-5 flex flex-col gap-6">
-                          <div className="border-l-2 border-[#30363d] pl-4 py-1">
-                            <h3 className="text-[11px] font-bold text-[#8b949e] tracking-wider mb-2">CORE ENGINEERING CHALLENGE</h3>
-                            <p className="text-[#e6edf3] text-sm md:text-base leading-relaxed">
-                              {proj.challenges}
-                            </p>
-                          </div>
-                          <p className="text-[#c9d1d9] text-base md:text-lg font-medium leading-relaxed">
-                            {proj.description}
-                          </p>
-                        </div>
-
-                        {/* COLUMN 3 (Right - ~25%): The Actions */}
-                        <div className="lg:col-span-3 flex flex-col gap-5">
-                          
-                          {/* Project Access CTA */}
-                          <div className="bg-[#040d21]/20 border border-[#30363d] rounded-xl p-5 flex flex-col">
-                            <h4 className="text-[10px] font-bold text-[#8b949e] tracking-[0.15em] mb-4 uppercase">Project Access</h4>
-                            <div className="flex flex-col gap-3">
-                              <a 
-                                href={proj.links.live} 
-                                target="_blank" 
-                                rel="noreferrer"
-                                className="w-full bg-[#f8f9fa] text-[#0d1117] py-2.5 px-4 rounded-lg text-sm font-bold hover:bg-[#e6e8eb] transition-colors flex justify-center items-center gap-2 group shadow-sm"
-                              >
-                                Live Demo
-                                <svg className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M7 17l9.2-9.2M17 17V7H7"/>
-                                </svg>
-                              </a>
-                              <a 
-                                href={`/works/${proj.slug}`} 
-                                className="w-full bg-transparent border border-[#30363d] text-[#e6edf3] py-2.5 px-4 rounded-lg text-sm font-bold hover:bg-[#161b22] hover:border-[#8b949e] transition-all flex justify-center items-center gap-2 group"
-                              >
-                                <svg className="w-4 h-4 text-[#8b949e] group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        {/* COLUMN 1 (Left): Clickable Image Preview */}
+                        <div className="lg:col-span-5 w-full">
+                          <Link 
+                            to={`/works/${proj.slug}`}
+                            className="group relative block aspect-[16/10] rounded-lg overflow-hidden bg-black/40 border border-white/10 shadow-lg transition-all duration-300 hover:border-[#2f81f7]"
+                          >
+                            <img 
+                              src={proj.image} 
+                              alt={proj.title} 
+                              className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" 
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                              <span className="text-xs font-mono font-medium text-white flex items-center gap-1.5 bg-[#2f81f7] px-3 py-1.5 rounded-md shadow">
+                                View Case Study 
+                                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                   <path d="M5 12h14M12 5l7 7-7 7"/>
                                 </svg>
-                                Read More
-                              </a>
+                              </span>
                             </div>
-                          </div>
-
-                          {/* Tech Stack - Smaller font, no green border, tighter spacing */}
-                          <div className="flex flex-col pl-1">
-                            <h4 className="text-[10px] font-bold text-[#8b949e] tracking-[0.15em] mb-2 uppercase">Technologies</h4>
-                            <div className="flex flex-wrap gap-1.5">
-                              {proj.techStack.map((tech, i) => (
-                                <span key={i} className="bg-white/5 text-[#8b949e] px-2 py-1 rounded text-[9px] md:text-[10px] font-mono">
-                                  {tech}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
+                          </Link>
                         </div>
                         
+                        {/* COLUMN 2 (Right): Description */}
+                        <div className="lg:col-span-7 flex flex-col gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-mono tracking-widest text-[#8b949e] uppercase">
+                                PROJECT OVERVIEW
+                              </span>
+                            </div>
+                            
+                            <Link 
+                              to={`/works/${proj.slug}`}
+                              className="group inline-flex items-center gap-2 text-2xl md:text-3xl font-bold text-white hover:text-[#2f81f7] transition-colors w-fit"
+                            >
+                              <span className="relative pb-0.5 border-b border-transparent group-hover:border-[#2f81f7] transition-all">
+                                {proj.title}
+                              </span>
+                              <svg className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[#2f81f7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                              </svg>
+                            </Link>
+                          </div>
+
+                          <p className="text-[#c9d1d9] text-sm md:text-base leading-relaxed">
+                            {proj.description}
+                          </p>
+
+                          {/* Tech Stack Tags */}
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {proj.techStack.map((tech, i) => (
+                              <span key={i} className="bg-white/5 border border-white/5 text-[#c9d1d9] px-2.5 py-1 rounded-md text-xs font-mono">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>

@@ -20,7 +20,6 @@ function ScrollToTop() {
 }
 
 function HomePage() {
-  // Live clock for the "discipline" slot
   const [timeStr, setTimeStr] = useState("")
 
   useEffect(() => {
@@ -65,11 +64,10 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="relative min-h-screen w-full m-0 p-0 bg-[#ebebea] overflow-x-clip">
-        {/* Global Immersive Navigation pinned to the absolute top-right of the window */}
       <div className="fixed top-0 right-0 z-50 p-6">
         <ImmersiveFullscreenNav 
           navConfig={{
-            brand: "", // Removed stray branding line
+            brand: "",
             overlayBg: "#101014",
             clipOrigin: "right",
           }}
@@ -80,7 +78,7 @@ function App() {
               { label: "Home", href: "/" },
               { label: "Work", href: "/all-works" },
               { label: "About", href: "#" },
-              { label: "Contact", href: "#" },
+              { label: "Resume", href: "#" },
             ],
           }}
         />

@@ -33,7 +33,6 @@ export type ProcessProps = {
   mutedTextColor?: string;
   activeColor?: string;
   backgroundColor?: string;
-  /** Reveal animation duration, in seconds. */
   duration?: number;
 };
 
@@ -54,19 +53,9 @@ function usePrefersReducedMotion() {
   );
 }
 
-/*
-  Layout is driven by CSS variables (desktop first, overridden under 600px),
-  so the track width and scroll length are derived from the phase count:
-
-    --pad  side padding of the track      --img  image width
-    --gap  gap between image and timeline --lbl  width of the title column
-    --p    horizontal distance between consecutive phases (they alternate
-           top / bottom, so same-side phases sit 2 x --p apart)
-    --w    width of a phase's text block --end  empty space after the last phase
-*/
 const LAYOUT_VARS = [
-  "[--pad:5vw] [--img:30vw] [--gap:5vw] [--lbl:30vw] [--p:22.5vw] [--w:28vw] [--end:10vw]",
-  "max-[600px]:[--pad:7vw] max-[600px]:[--img:85vw] max-[600px]:[--gap:5vw] max-[600px]:[--lbl:75vw] max-[600px]:[--p:55vw] max-[600px]:[--w:70vw] max-[600px]:[--end:20vw]",
+  "[--pad:5vw] [--img:30vw] [--gap:5vw] [--lbl:30vw] [--p:22.5vw] [--w:28vw] [--end:10vw] [--t-left:0px] [--t-width:var(--lbl)]",
+  "max-md:[--pad:7vw] max-md:[--img:85vw] max-md:[--gap:15vw] max-md:[--lbl:0vw] max-md:[--p:65vw] max-md:[--w:75vw] max-md:[--end:20vw] max-md:[--t-left:calc(-1*(var(--img)+var(--gap)))] max-md:[--t-width:85vw]",
 ].join(" ");
 
 export default function Process({
@@ -87,8 +76,6 @@ export default function Process({
   const normalizedDuration = Math.max(0.2, duration);
   const count = phases.length;
 
-  // Bumped when the viewport width changes so the text splits and scroll
-  // ranges are rebuilt for the new layout.
   const [layoutKey, setLayoutKey] = useState(0);
 
   useEffect(() => {
@@ -122,7 +109,6 @@ export default function Process({
       const getDistance = () =>
         Math.max(0, slider.offsetWidth - window.innerWidth);
 
-      // x position of an element inside the (translated) slider, in px.
       const xInSlider = (el: Element) =>
         el.getBoundingClientRect().left - slider.getBoundingClientRect().left;
 
@@ -134,7 +120,6 @@ export default function Process({
         invalidateOnRefresh: true,
       };
 
-      // Horizontal slide, spans the whole section scroll.
       gsap.fromTo(
         slider,
         { x: 0 },
@@ -143,7 +128,6 @@ export default function Process({
 
       if (reducedMotion) return;
 
-      // Axis line draws left to right, staying just ahead of the phases.
       const line = section.querySelector<HTMLElement>("[data-line]");
       if (line) {
         gsap.set(line, { transformOrigin: "0% 50%" });
@@ -188,8 +172,6 @@ export default function Process({
         });
         splits.push(titleSplit, descSplit);
 
-        // Scroll range (px from the section start) in which this phase
-        // reveals: from its dot sitting at 85% of the viewport width to 50%.
         const getRange = () => {
           const distance = getDistance();
           const vw = window.innerWidth;
@@ -252,7 +234,6 @@ export default function Process({
     backgroundColor,
     "--total": `calc(var(--pad) * 2 + var(--img) + var(--gap) + var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
     "--area": `calc(var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
-    // Pinned height (100vh) + exactly the horizontal distance to travel.
     height: "max(100vh, calc(100vh + var(--total) - 100vw))",
   } as CSSProperties;
 
@@ -266,17 +247,18 @@ export default function Process({
       className={`relative w-full ${LAYOUT_VARS}`}
       style={sectionStyle}
     >
-      <div className="sticky top-0 h-screen w-screen overflow-hidden pt-[10%]">
+      <div className="sticky top-0 h-screen w-screen overflow-hidden pt-[10%] max-md:pt-[15%]">
         <div
           ref={sliderRef}
-          className="flex h-[30vw] items-center max-[600px]:h-[75vh]"
+          className="flex h-[30vw] items-center max-md:h-[65vh]"
           style={{
             width: "var(--total)",
             paddingInline: "var(--pad)",
             columnGap: "var(--gap)",
           }}
         >
-          <div className="h-full w-[var(--img)] shrink-0 overflow-hidden rounded-[1vw] max-[600px]:h-[65vw] max-[600px]:rounded-[5vw]">
+          {/* Main Image */}
+          <div className="h-full w-[var(--img)] shrink-0 overflow-hidden rounded-[1vw] max-md:h-[60vw] max-md:rounded-[5vw]">
             <img
               src={imageUrl}
               alt={imageAlt}
@@ -289,10 +271,10 @@ export default function Process({
             className="relative h-full shrink-0"
             style={{ width: "var(--area)" }}
           >
-            {/* Axis */}
+            {/* Horizontal Axis */}
             <div className="absolute left-0 top-1/2 flex w-full -translate-y-1/2 items-center">
               <div
-                className="size-[.8vw] shrink-0 rounded-full max-[600px]:size-[2vw]"
+                className="size-[.8vw] shrink-0 rounded-full max-md:size-[2vw]"
                 style={activeStyle}
               />
               <div
@@ -301,51 +283,30 @@ export default function Process({
                 style={activeStyle}
               />
               <div
-                className="size-[.8vw] shrink-0 rounded-full max-[600px]:size-[2vw]"
+                className="size-[.8vw] shrink-0 rounded-full max-md:size-[2vw]"
                 style={activeStyle}
               />
             </div>
 
-            {/* Title column */}
             <div
-              className="absolute left-0 top-0 h-1/2 pr-[3vw] pt-[2vw] max-[600px]:pr-[7vw] max-[600px]:pt-[5vw]"
-              style={{ width: "var(--lbl)" }}
+              className="absolute top-0 md:h-1/2 pr-[3vw] pt-[2vw] max-md:pr-0 max-md:pt-0"
+              style={{ width: "var(--t-width)", left: "var(--t-left)" }}
             >
-              <h2 className="text-[2.6vw] font-medium leading-[0.95] max-[600px]:text-[7.5vw]">
+              <h2 className="text-[2.6vw] font-medium leading-[0.95] max-md:text-[10vw]">
                 {title}
               </h2>
-            </div>
-            <div
-              className="absolute left-0 top-1/2 pt-[2vw] max-[600px]:pt-[5vw]"
-              style={{ width: "var(--lbl)" }}
-            >
               <p
-                className="text-[1.65vw] leading-none max-[600px]:text-[4.2vw]"
+                className="mt-[1.5vw] text-[1.65vw] leading-none max-md:mt-[3vw] max-md:text-[4.5vw]"
                 style={mutedStyle}
               >
                 {periodLabel}
               </p>
             </div>
 
-            {/* Phases: even index sits above the axis, odd index below */}
+            {/* Alternating Phases */}
             {phases.map((phase, index) => {
               const isTop = index % 2 === 0;
               const number = String(index + 1).padStart(2, "0");
-
-              const dot = (
-                <div
-                  data-dot
-                  className="-ml-[.5vw] size-[1vw] shrink-0 rounded-full max-[600px]:-ml-[1.25vw] max-[600px]:size-[2.5vw]"
-                  style={activeStyle}
-                />
-              );
-              const stem = (
-                <div
-                  data-stem
-                  className="w-px flex-1 rounded-full"
-                  style={activeStyle}
-                />
-              );
 
               return (
                 <div
@@ -360,31 +321,47 @@ export default function Process({
                   <div className="absolute inset-0 flex flex-col items-start">
                     {isTop ? (
                       <>
-                        {dot}
-                        {stem}
+                        <div
+                          data-dot
+                          className="-ml-[.5vw] size-[1vw] shrink-0 rounded-full max-md:-ml-[1.25vw] max-md:size-[2.5vw]"
+                          style={activeStyle}
+                        />
+                        <div
+                          data-stem
+                          className="w-px flex-1 rounded-full"
+                          style={activeStyle}
+                        />
                       </>
                     ) : (
                       <>
-                        {stem}
-                        {dot}
+                        <div
+                          data-stem
+                          className="w-px flex-1 rounded-full"
+                          style={activeStyle}
+                        />
+                        <div
+                          data-dot
+                          className="-ml-[.5vw] size-[1vw] shrink-0 rounded-full max-md:-ml-[1.25vw] max-md:size-[2.5vw]"
+                          style={activeStyle}
+                        />
                       </>
                     )}
                   </div>
 
                   <div
-                    className={`relative space-y-[1vw] pl-[3vw] pr-[1vw] max-[600px]:space-y-[2vw] max-[600px]:pl-[7vw] ${
-                      isTop ? "" : "flex h-full flex-col justify-end"
+                    className={`relative space-y-[1vw] pl-[3vw] pr-[1vw] max-md:space-y-[3vw] max-md:pl-[6vw] ${
+                      isTop ? "pt-[2vw] max-md:pt-[4vw]" : "flex h-full flex-col justify-end pb-[2vw] max-md:pb-[4vw]"
                     }`}
                   >
                     <h4
                       data-title
-                      className="text-[2.2vw] leading-none max-[600px]:text-[6vw]"
+                      className="text-[2.2vw] leading-none max-md:text-[6.5vw]"
                     >
                       {`${number} - ${phase.title}`}
                     </h4>
                     <p
                       data-desc
-                      className="w-[90%] text-[1.5vw] leading-[1.15] max-[600px]:text-[4.8vw]"
+                      className="w-[90%] text-[1.5vw] leading-[1.15] max-md:text-[4vw] max-md:w-full"
                       style={mutedStyle}
                     >
                       {phase.description}

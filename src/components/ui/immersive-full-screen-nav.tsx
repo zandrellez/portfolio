@@ -5,11 +5,6 @@ import gsap from "gsap";
 import type { MouseEvent, ReactNode } from "react";
 import { useEffect, useRef, useState, type RefObject } from "react";
 
-/* ------------------------------------------------------------------ *
- * Inlined from ./useFocusTrap — keeps keyboard focus inside a container
- * while it's open, restores it to the trigger on close.
- * ------------------------------------------------------------------ */
-
 const FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
@@ -38,16 +33,6 @@ interface UseFocusTrapParams {
   onEscape?: () => void;
 }
 
-/**
- * Keeps keyboard focus inside `containerRef` while `active` is true.
- *
- * - Captures the element focused before opening and restores focus to it on
- *   close (so the trigger button gets focus back).
- * - Moves focus into the menu on open (to `initialFocusRef` when provided,
- *   otherwise the first focusable element).
- * - Wraps Tab / Shift+Tab around the menu's focusable elements.
- * - Calls `onEscape` when the Escape key is pressed.
- */
 function useFocusTrap({ active, containerRef, initialFocusRef, onEscape }: UseFocusTrapParams) {
   const onEscapeRef = useRef(onEscape);
   onEscapeRef.current = onEscape;
@@ -69,7 +54,6 @@ function useFocusTrap({ active, containerRef, initialFocusRef, onEscape }: UseFo
       target.focus();
     };
 
-    // Defer focus so it lands after the menu has mounted / started animating in.
     const focusFrame = requestAnimationFrame(focusInitial);
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -117,13 +101,6 @@ function useFocusTrap({ active, containerRef, initialFocusRef, onEscape }: UseFo
   }, [active, containerRef, initialFocusRef]);
 }
 
-/* ------------------------------------------------------------------ *
- * FullscreenNav — the clip-path reveal shell: fixed header (brand + toggle)
- * and a fixed full-screen panel that wipes open from `clipOrigin`. Accepts
- * either a static `links` list or a `children(isOpen)` render prop for a
- * fully custom panel layout (CustomNavbar below uses this).
- * ------------------------------------------------------------------ */
-
 const CLIPS = {
   bottom: {
     closedInitial: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
@@ -156,7 +133,6 @@ export interface FullscreenNavLink {
 
 export interface FullscreenNavProps {
   links?: FullscreenNavLink[];
-  /** Brand text shown in the fixed header, linking to `brandHref`. */
   brand?: string;
   brandHref?: string;
   clipOrigin?: keyof typeof CLIPS;
@@ -168,7 +144,6 @@ export interface FullscreenNavProps {
   openDuration?: number;
   closeDuration?: number;
   ease?: string;
-  /** Header text/hamburger-bar color while the overlay is open. Closed color is fixed black, matching the header's light-page default. */
   headerOpenColor?: string;
   onOpen?: () => void;
   onClose?: () => void;
@@ -317,7 +292,6 @@ function FullscreenNav({
     };
   }, [isOpen]);
 
-  // Trap focus inside the overlay while open, restore it to the toggle on close.
   useFocusTrap({ active: isOpen, containerRef: rootRef, initialFocusRef: toggleButtonRef, onEscape: onCloseMenu });
 
   return (
@@ -368,10 +342,7 @@ function FullscreenNav({
         aria-hidden={!isOpen}
         role="navigation"
       >
-        {/* min-h-screen, not h-screen: content shorter than the viewport still
-            fills it, but content taller than it (e.g. a lot of links at a
-            small window height) can grow past 100vh instead of being
-            clamped and clipped — the overflow-y-auto above then scrolls it. */}
+        
         <div ref={linksWrapperRef} className="flex min-h-screen w-screen flex-col items-center justify-center motion-reduce:opacity-100">
           {children
             ? children(isOpen)
@@ -395,12 +366,7 @@ function FullscreenNav({
   );
 }
 
-/* ------------------------------------------------------------------ *
- * CustomNavbar — a fuller panel layout (links, image row, brand/tagline,
- * socials, location) meant to be passed as FullscreenNav's children render
- * prop. Handles its own reveal animation keyed off `isOpen`.
- * ------------------------------------------------------------------ */
-
+// CustomNavbar
 const SOCIAL_ICONS: Record<string, ReactNode> = {
   instagram: (
     <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="<http://www.w3.org/2000/svg>" className="h-6 w-6 max-[1025px]:h-8 max-[1025px]:w-8 max-md:h-6 max-md:w-6">
@@ -445,12 +411,6 @@ const IMAGE_DELAY_OFFSET = 0.1;
 const SOCIAL_DELAY_OFFSET = 0.2;
 const LOCATION_DELAY_OFFSET = 0.25;
 
-/* Character-split hover reveal for the main nav links — borrowed from
-   unfold-navbar's LinkHover: each character sits above its own text-shadow
-   duplicate (offset 1.2em down, same color), and on hover/focus every
-   character's real copy slides up out of view at a staggered delay,
-   revealing the shadow copy sliding into place beneath it. Falls back to
-   plain text under prefers-reduced-motion. */
 function NavLinkHover({
   label,
   href,
@@ -513,7 +473,6 @@ export interface CustomNavbarProps {
   linkOffsetY?: number;
   linkDuration?: number;
   linkStagger?: number;
-  /** Per-character delay (seconds) on the main links' hover reveal. */
   linkCharStagger?: number;
   imageStartScale?: number;
   imageDuration?: number;
@@ -680,7 +639,6 @@ function CustomNavbar({
                 alt={item.label} 
                 className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 motion-reduce:scale-100 motion-reduce:transition-none motion-reduce:hover:scale-100" 
                 />
-                {/* Dark gradient overlay with category title */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity group-hover:opacity-100 flex items-end p-6">
                 <span className="text-white text-lg font-bold tracking-wide uppercase">
                     {item.label}
@@ -730,7 +688,7 @@ const NAV_CONTENT: Partial<CustomNavbarProps> = {
     { label: "Home", href: "#" },
     { label: "Work", href: "#" },
     { label: "About", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "Resume", href: "#" },
   ],
   images: [
     "<https://cdn.21st.dev/assets/mirror/ba/baa678cbac1a29e773743a10ff421b226cf0e9b5d786ebf34415063d6dabc02b.jpg>",
@@ -767,14 +725,6 @@ export interface ImmersiveFullscreenNavProps {
   socialOffsetY?: number;
 }
 
-/**
- * A fixed header (brand + hamburger) that wipes a full-screen nav panel open
- * via `clip-path`, animating in a brand block, nav links, an image row, and
- * socials. `navConfig` controls the shell (`FullscreenNav`); `navContent`
- * controls the panel's content (`CustomNavbar`). Respects
- * `prefers-reduced-motion` throughout — the clip-path wipe becomes a plain
- * fade and every staggered reveal becomes an instant set.
- */
 export default function ImmersiveFullscreenNav({ navConfig = NAV_CONFIG, navContent = NAV_CONTENT, ...props }: ImmersiveFullscreenNavProps) {
   const {
     overlayBg,
