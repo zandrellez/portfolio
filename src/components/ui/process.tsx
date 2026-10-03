@@ -64,10 +64,10 @@ export default function Process({
   phases = processPhases,
   imageUrl = processMeta.imageUrl,
   imageAlt = processMeta.imageAlt,
-  textColor = "#1a211b",
-  mutedTextColor = "#4b524d",
-  activeColor = "#93ab92",
-  backgroundColor = "#fdfdf5",
+  textColor = "var(--text-h)",
+  mutedTextColor = "var(--text)",
+  activeColor = "var(--accent)",
+  backgroundColor = "var(--bg)",
   duration = 1.2,
 }: ProcessProps) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -244,7 +244,7 @@ export default function Process({
     <section
       ref={sectionRef}
       id="process"
-      className={`relative w-full border-t border-[#93ab92]/20 ${LAYOUT_VARS}`}
+      className={`relative w-full border-t border-[var(--border)] ${LAYOUT_VARS}`}
       style={sectionStyle}
     >
       <div className="sticky top-0 h-screen w-screen overflow-hidden pt-[10%] max-md:pt-[15%]">

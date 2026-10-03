@@ -79,10 +79,10 @@ export default function AboutMe() {
     <section className="about-me">
       <style>{`
         .about-me {
-          --paper: #fdfdf5;
-          --ink: #1a211b;
-          --muted: #93ab92;
-          --line: rgba(147, 171, 146, 0.25);
+          --paper: var(--bg);
+          --ink: var(--text-h);
+          --muted: var(--accent);
+          --line: var(--border);
 
           position: relative;
           width: 100%;
@@ -100,7 +100,7 @@ export default function AboutMe() {
           inset: 0;
           pointer-events: none;
           opacity: 0.08;
-          background-image: radial-gradient(#93ab92 1px, transparent 1px);
+          background-image: radial-gradient(var(--accent) 1px, transparent 1px);
           background-size: 32px 32px;
           z-index: 1;
           background-attachment: fixed;
@@ -153,10 +153,10 @@ export default function AboutMe() {
           width: 78%;
           height: 85%;
           overflow: hidden;
-          background: #111;
+          background: var(--surface-raised);
           border-radius: 1rem;
           isolation: isolate;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+          box-shadow: var(--shadow);
         }
 
         .about-image {
@@ -188,7 +188,7 @@ export default function AboutMe() {
           );
           pointer-events: none;
           background-color: var(--paper);
-          background-image: radial-gradient(rgba(147, 171, 146, 0.15) 1px, transparent 1px);
+          background-image: radial-gradient(var(--accent-glow) 1px, transparent 1px);
           background-size: 32px 32px;
           background-attachment: fixed;
           -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
@@ -211,7 +211,7 @@ export default function AboutMe() {
           font-weight: 700;
           letter-spacing: -0.06em;
           color: var(--ink);
-          text-shadow: 0 2px 10px rgba(253, 253, 245, 0.8);
+          text-shadow: 0 2px 10px color-mix(in srgb, var(--paper) 80%, transparent);
           white-space: nowrap;
         }
 
@@ -236,7 +236,7 @@ export default function AboutMe() {
 
         .about-arrow:hover {
           background: var(--muted);
-          color: #fff;
+          color: var(--bg);
           transform: translateX(-50%) scale(1.08);
         }
 

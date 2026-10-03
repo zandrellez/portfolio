@@ -8,6 +8,7 @@ import AllWorksSection from './components/ui/all-works'
 import ServicesAndTools from './components/ui/services'
 import Processes from './components/ui/process'
 import CertificatesSection from './components/ui/certificates'
+import ContactSection from './components/ui/contact'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -49,27 +50,48 @@ function HomePage() {
         seekingLabel="Focus"
         seeking="Full-Stack & Automation"
         services={[]}
+        accent="var(--accent)"
+        paper="var(--bg)"
+        ink="var(--text-h)"
       />
       <AboutMe />
       <ProjectsSection />
       <ServicesAndTools />
       <Processes />
       <CertificatesSection />
+      <ContactSection />
     </main>
   )
 }
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const savedTheme = window.localStorage.getItem("theme")
+    if (savedTheme === "light" || savedTheme === "dark") return savedTheme
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  })
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    window.localStorage.setItem("theme", theme)
+  }, [theme])
+
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="relative min-h-screen w-full m-0 p-0 bg-[#ebebea] overflow-x-clip">
+      <div className="relative min-h-screen w-full m-0 p-0 bg-[var(--bg)] text-[var(--text)] overflow-x-clip">
       <div className="fixed top-0 right-0 z-50 p-6">
         <ImmersiveFullscreenNav 
+          theme={theme}
+          onThemeToggle={() => setTheme((current) => current === "dark" ? "light" : "dark")}
           navConfig={{
             brand: "",
-            overlayBg: "#101014",
+            overlayBg: "var(--nav-bg)",
+            linkColor: "var(--nav-text)",
+            linkHoverColor: "var(--accent)",
             clipOrigin: "right",
+            headerOpenColor: "var(--nav-text)",
+            headerClosedColor: "var(--text-h)",
           }}
           navContent={{
             tagline: "Engineering Clarity Out Of Complexity.",

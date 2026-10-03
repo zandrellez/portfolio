@@ -82,7 +82,7 @@ export default function ProjectsSection() {
     <section
       id="projects"
       ref={containerRef}
-      className="relative w-full bg-[#fdfdf5] text-[#1a211b]"
+      className="relative w-full bg-[var(--bg)] text-[var(--text-h)]"
       style={{ height: `${totalScrollStages * 100}svh` }}
     >
       <div className="sticky top-0 h-svh w-full flex items-center justify-center overflow-hidden">
@@ -96,19 +96,19 @@ export default function ProjectsSection() {
           }}
         >
           <div className="flex flex-col items-center font-sans tracking-tight">
-            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] mb-1">
+            <div className="bg-[var(--accent-soft)] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[var(--text-h)] mb-1">
               Discover my latest work and
             </div>
-            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] mb-1 -ml-8 md:-ml-12">
+            <div className="bg-[var(--accent-soft)] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[var(--text-h)] mb-1 -ml-8 md:-ml-12">
               creative solutions
             </div>
-            <div className="bg-[#93ab92]/20 px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[#1a211b] ml-8 md:ml-12">
+            <div className="bg-[var(--accent-soft)] px-4 md:px-6 py-1 md:py-2 text-3xl md:text-6xl font-medium text-[var(--text-h)] ml-8 md:ml-12">
               that bring ideas to life
             </div>
           </div>
           <div className="absolute bottom-12 flex flex-col items-center gap-3 opacity-60">
-            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#1a211b]">Scroll to explore</span>
-            <svg className="w-4 h-4 text-[#1a211b] animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[var(--text-h)]">Scroll to explore</span>
+            <svg className="w-4 h-4 text-[var(--text-h)] animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 9l6 6 6-6"/>
             </svg>
           </div>
@@ -116,11 +116,11 @@ export default function ProjectsSection() {
 
         {/* PHASE 2: The Browser Window */}
         <div 
-          className="relative z-10 w-[95%] md:w-[90%] max-w-[1400px] h-[85vh] flex flex-col rounded-xl overflow-hidden border border-[#30363d] shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0d1117] font-sans"
+          className="relative z-10 w-[95%] md:w-[90%] max-w-[1400px] h-[85vh] flex flex-col rounded-xl overflow-hidden border border-[var(--contrast-border)] shadow-[var(--contrast-shadow)] bg-[var(--contrast-surface)] font-sans"
           style={{ transform: `translateY(${scrollAnim.browserY}vh)` }}
         >
           
-          <div className="flex items-end bg-[#010409] px-2 pt-2 gap-1 overflow-x-auto no-scrollbar shrink-0 border-b border-[#30363d]">
+          <div className="flex items-end bg-[var(--contrast-bg)] px-2 pt-2 gap-1 overflow-x-auto no-scrollbar shrink-0 border-b border-[var(--contrast-border)]">
             
             {/* DESKTOP Tabs */}
             <div className="hidden md:flex items-end gap-1 flex-1">
@@ -130,13 +130,13 @@ export default function ProjectsSection() {
                   <button
                     key={proj.id}
                     onClick={() => scrollToTab(idx)}
-                    className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-[#30363d] ${
+                    className={`min-w-[140px] max-w-[200px] flex-1 px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs transition-colors border-r border-[var(--contrast-border)] ${
                       isActive 
-                        ? "bg-[#161b22] text-[#e6edf3] font-medium border-t border-x border-[#30363d]" 
-                        : "bg-transparent text-[#7d8590] hover:bg-[#161b22]/50 hover:text-[#c9d1d9]"
+                        ? "bg-[var(--contrast-surface)] text-[var(--contrast-text-h)] font-medium border-t border-x border-[var(--contrast-border)]"
+                        : "bg-transparent text-[var(--contrast-muted)] hover:bg-[var(--contrast-surface)] hover:text-[var(--contrast-text-h)]"
                     }`}
                   >
-                    <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[#93ab92]' : 'bg-[#30363d]'}`} />
+                    <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-[var(--contrast-accent)]' : 'bg-[var(--contrast-border)]'}`} />
                     <span className="truncate font-medium">WORKS {proj.id}</span>
                     {isActive && <span className="ml-auto opacity-50 hover:opacity-100 font-bold">×</span>}
                   </button>
@@ -146,49 +146,49 @@ export default function ProjectsSection() {
 
             {/* MOBILE Tab */}
             <div className="flex md:hidden items-end flex-1">
-              <button className="w-full max-w-[200px] px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs bg-[#161b22] text-[#e6edf3] border-r border-t border-x border-[#30363d]">
-                <span className="w-2 h-2 rounded-full bg-[#93ab92]" />
+              <button className="w-full max-w-[200px] px-4 py-2 rounded-t-lg flex items-center gap-3 text-xs bg-[var(--contrast-surface)] text-[var(--contrast-text-h)] border-r border-t border-x border-[var(--contrast-border)]">
+                <span className="w-2 h-2 rounded-full bg-[var(--contrast-accent)]" />
                 <span className="truncate font-medium">WORKS {activeProject?.id || activeTab + 1}</span>
               </button>
             </div>
             
             <div className="ml-auto flex items-center pr-2 pb-1">
-              <Link to="/all-works" className="text-[10px] font-mono font-bold text-[#93ab92] hover:text-white transition-colors flex items-center gap-2 px-3 py-1.5 bg-[#93ab92]/10 rounded-md hover:bg-[#93ab92]/20 border border-[#93ab92]/30 whitespace-nowrap">
+              <Link to="/all-works" className="text-[10px] font-mono font-bold text-[var(--contrast-accent)] hover:text-[var(--contrast-text-h)] transition-colors flex items-center gap-2 px-3 py-1.5 bg-[var(--contrast-accent-soft)] rounded-md hover:bg-[var(--contrast-accent-glow)] border border-[var(--contrast-border)] whitespace-nowrap">
                 [ VIEW ALL ↗ ]
               </Link>
             </div>
           </div>
 
           {/* Browser Address Bar */}
-          <div className="bg-[#161b22] px-4 py-2 flex items-center gap-4 border-b border-[#30363d] shrink-0">
-            <div className="flex items-center gap-4 text-[#7d8590] text-lg select-none hidden md:flex">
-              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors">←</span>
-              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors opacity-40">→</span>
-              <span className="cursor-pointer hover:text-[#c9d1d9] transition-colors text-sm">↻</span>
+          <div className="bg-[var(--contrast-surface-raised)] px-4 py-2 flex items-center gap-4 border-b border-[var(--contrast-border)] shrink-0">
+            <div className="flex items-center gap-4 text-[var(--contrast-muted)] text-lg select-none hidden md:flex">
+              <span className="cursor-pointer hover:text-[var(--contrast-text-h)] transition-colors">←</span>
+              <span className="cursor-pointer hover:text-[var(--contrast-text-h)] transition-colors opacity-40">→</span>
+              <span className="cursor-pointer hover:text-[var(--contrast-text-h)] transition-colors text-sm">↻</span>
             </div>
-            <div className="flex-1 bg-[#0d1117] rounded-full px-4 py-1.5 flex items-center gap-3 text-sm text-[#e6edf3] border border-[#30363d] transition-all">
+            <div className="flex-1 bg-[var(--contrast-bg)] rounded-full px-4 py-1.5 flex items-center gap-3 text-sm text-[var(--contrast-text)] border border-[var(--contrast-border)] transition-all">
               <span className="text-xs">🔒</span>
               <span className="font-mono opacity-60 sm:inline">github.com/zandrellez/</span>
-              <span className="font-mono font-medium text-white transition-all duration-300">{activeProject?.slug}</span>
+              <span className="font-mono font-medium text-[var(--contrast-text-h)] transition-all duration-300">{activeProject?.slug}</span>
             </div>
           </div>
 
           {/* GitHub Repository Content Area */}
-          <div className="relative flex-1 bg-[#0d1117] overflow-hidden flex">
+          <div className="relative flex-1 bg-[var(--contrast-surface)] overflow-hidden flex">
             {featuredProjects.map((proj, idx) => {
               const isActive = activeTab === idx
               if (!isActive) return null
 
               return (
-                <div key={proj.id} className="absolute inset-0 flex flex-col text-[#e6edf3] animate-in fade-in zoom-in-95 duration-300">
+                <div key={proj.id} className="absolute inset-0 flex flex-col text-[var(--contrast-text-h)] animate-in fade-in zoom-in-95 duration-300">
                   
                   {/* Repo Header */}
                   <div className="flex flex-wrap items-center justify-between gap-4 p-4 md:p-6 shrink-0">
                     <div className="flex items-center gap-2 text-lg md:text-xl">
-                      <span className="text-[#8b949e]">zandrellez</span>
-                      <span className="text-[#8b949e]">/</span>
-                      <span className="font-bold text-[#2f81f7]">{proj.slug}</span>
-                      <span className="border border-[#30363d] rounded-full px-2 py-0.5 text-[10px] text-[#8b949e] ml-2 font-medium">
+                      <span className="text-[var(--contrast-muted)]">zandrellez</span>
+                      <span className="text-[var(--contrast-muted)]">/</span>
+                      <span className="font-bold text-[var(--contrast-accent)]">{proj.slug}</span>
+                      <span className="border border-[var(--contrast-border)] rounded-full px-2 py-0.5 text-[10px] text-[var(--contrast-muted)] ml-2 font-medium">
                         Public
                       </span>
                     </div>
@@ -197,7 +197,7 @@ export default function ProjectsSection() {
                         href={proj.links.live} 
                         target="_blank" 
                         rel="noreferrer"
-                        className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] hover:text-white transition-colors flex items-center gap-1.5"
+                        className="bg-[var(--contrast-surface-raised)] border border-[var(--contrast-border)] text-[var(--contrast-text)] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[var(--contrast-accent-soft)] hover:text-[var(--contrast-text-h)] transition-colors flex items-center gap-1.5"
                       >
                         <span>Live</span>
                         <svg className="w-3.5 h-3.5 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -208,7 +208,7 @@ export default function ProjectsSection() {
                         href={proj.links.github || `https://github.com/zandrellez/${proj.slug}`} 
                         target="_blank" 
                         rel="noreferrer"
-                        className="bg-[#21262d] border border-[#30363d] text-[#c9d1d9] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[#30363d] hover:text-white transition-colors flex items-center gap-1.5"
+                        className="bg-[var(--contrast-surface-raised)] border border-[var(--contrast-border)] text-[var(--contrast-text)] px-3 py-1.5 rounded-md text-xs font-semibold hover:bg-[var(--contrast-accent-soft)] hover:text-[var(--contrast-text-h)] transition-colors flex items-center gap-1.5"
                       >
                         <span>GitHub</span>
                         <svg className="w-3.5 h-3.5 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -219,18 +219,18 @@ export default function ProjectsSection() {
                     </div>
                   </div>
 
-                  <div className="flex-1 flex flex-col mx-4 md:mx-6 mb-4 md:mb-6 rounded-md bg-[#0a0d13]">
-                    <div className="px-4 py-2 border-b border-[#30363d] font-semibold text-xs bg-[#161b22] flex flex-wrap items-center justify-between gap-4 text-[#e6edf3] shrink-0 rounded-t-md">
+                  <div className="flex-1 flex flex-col mx-4 md:mx-6 mb-4 md:mb-6 rounded-md bg-[var(--contrast-bg)]">
+                    <div className="px-4 py-2 border-b border-[var(--contrast-border)] font-semibold text-xs bg-[var(--contrast-surface-raised)] flex flex-wrap items-center justify-between gap-4 text-[var(--contrast-text-h)] shrink-0 rounded-t-md">
                       <div className="flex items-center gap-2">
-                         <span className="text-[#8b949e]">☰</span> README.md
+                         <span className="text-[var(--contrast-muted)]">☰</span> README.md
                       </div>
                       
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono border ${proj.status === 'Completed' ? 'bg-[#238636]/10 text-[#238636] border-[#238636]/30' : 'bg-[#d29922]/10 text-[#d29922] border-[#d29922]/30'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono border ${proj.status === 'Completed' ? 'bg-[var(--contrast-accent-soft)] text-[var(--contrast-accent)] border-[var(--contrast-accent)]' : 'bg-[color-mix(in_srgb,var(--contrast-warning)_12%,transparent)] text-[var(--contrast-warning)] border-[var(--contrast-warning)]'}`}>
                            {proj.status}
                         </span>
                         {proj.categories.map((cat, i) => (
-                          <span key={i} className="bg-[#2f81f7]/10 text-[#2f81f7] border border-[#2f81f7]/30 px-2 py-0.5 rounded-full text-[10px] font-mono">
+                          <span key={i} className="bg-[var(--contrast-accent-soft)] text-[var(--contrast-accent)] border border-[var(--contrast-border)] px-2 py-0.5 rounded-full text-[10px] font-mono">
                             {cat}
                           </span>
                         ))}
@@ -245,7 +245,7 @@ export default function ProjectsSection() {
                         <div className="lg:col-span-5 w-full">
                           <Link 
                             to={`/works/${proj.slug}`}
-                            className="group relative block aspect-[16/10] rounded-lg overflow-hidden bg-black/40 border border-white/10 shadow-lg transition-all duration-300 hover:border-[#2f81f7]"
+                            className="group relative block aspect-[16/10] rounded-lg overflow-hidden bg-[var(--contrast-surface-raised)] border border-[var(--contrast-border)] shadow-lg transition-all duration-300 hover:border-[var(--contrast-accent)]"
                           >
                             <img 
                               src={proj.image} 
@@ -253,7 +253,7 @@ export default function ProjectsSection() {
                               className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" 
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                              <span className="text-xs font-mono font-medium text-white flex items-center gap-1.5 bg-[#2f81f7] px-3 py-1.5 rounded-md shadow">
+                              <span className="text-xs font-mono font-medium text-[var(--contrast-bg)] flex items-center gap-1.5 bg-[var(--contrast-accent)] px-3 py-1.5 rounded-md shadow">
                                 View Case Study 
                                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -267,32 +267,35 @@ export default function ProjectsSection() {
                         <div className="lg:col-span-7 flex flex-col gap-4">
                           <div className="flex flex-col gap-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="text-[11px] font-mono tracking-widest text-[#8b949e] uppercase">
+                              <span className="text-[11px] font-mono tracking-widest text-[var(--contrast-muted)] uppercase">
                                 PROJECT OVERVIEW
                               </span>
                             </div>
                             
                             <Link 
                               to={`/works/${proj.slug}`}
-                              className="group inline-flex items-center gap-2 text-2xl md:text-3xl font-bold text-white hover:text-[#2f81f7] transition-colors w-fit"
+                              className="group inline-flex items-center gap-2 text-2xl md:text-3xl font-bold text-[var(--contrast-text-h)] hover:text-[var(--contrast-accent)] transition-colors w-fit"
                             >
-                              <span className="relative pb-0.5 border-b border-transparent group-hover:border-[#2f81f7] transition-all">
+                              <span className="relative pb-0.5 border-b border-transparent group-hover:border-[var(--contrast-accent)] transition-all">
                                 {proj.title}
                               </span>
-                              <svg className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[#2f81f7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <svg className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[var(--contrast-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                               </svg>
                             </Link>
                           </div>
 
-                          <p className="text-[#c9d1d9] text-sm md:text-base leading-relaxed">
+                          <p
+                            className="text-sm md:text-base leading-relaxed"
+                            style={{ color: "var(--contrast-text)" }}
+                          >
                             {proj.description}
                           </p>
 
                           {/* Tech Stack Tags */}
                           <div className="flex flex-wrap gap-2 pt-1">
                             {proj.techStack.map((tech, i) => (
-                              <span key={i} className="bg-white/5 border border-white/5 text-[#c9d1d9] px-2.5 py-1 rounded-md text-xs font-mono">
+                              <span key={i} className="bg-[var(--contrast-surface-raised)] border border-[var(--contrast-border)] text-[var(--contrast-text)] px-2.5 py-1 rounded-md text-xs font-mono">
                                 {tech}
                               </span>
                             ))}

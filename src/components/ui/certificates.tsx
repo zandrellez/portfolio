@@ -14,10 +14,10 @@ export default function CertificatesSection() {
   return (
     <section 
       id="certificates" 
-      className="relative px-6 py-16 sm:py-24 sm:px-12 lg:px-20 overflow-hidden"
+      className="relative px-6 py-16 sm:py-24 sm:px-12 lg:px-20 overflow-hidden text-[var(--text)]"
       style={{ 
-        backgroundColor: "#fdfdf5", 
-        borderTop: "1px solid rgba(147, 171, 146, 0.2)" 
+        backgroundColor: "var(--bg)",
+        borderTop: "1px solid var(--border)"
       }}
       onMouseMove={handleMouseMove}
     >
@@ -30,13 +30,13 @@ export default function CertificatesSection() {
           <div className="lg:col-span-5 space-y-4 sm:space-y-6">
             <h2 
               className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-7xl"
-              style={{ color: "#1a211b" }}
+              style={{ color: "var(--text-h)" }}
             >
               Certificates
             </h2>
             <p 
               className="max-w-sm text-sm leading-relaxed sm:text-base"
-              style={{ color: "#4b524d" }}
+              style={{ color: "var(--text)" }}
             >
               Here's a list of some certificates and credentials that I've earned so far!
             </p>
@@ -45,7 +45,7 @@ export default function CertificatesSection() {
           {/* Right Column: Certificate List */}
           <div 
             className="lg:col-span-7 flex flex-col mt-4 lg:mt-0"
-            style={{ borderTop: "1px solid rgba(147, 171, 146, 0.2)" }}
+            style={{ borderTop: "1px solid var(--border)" }}
           >
             {certificatesData.map((cert) => (
               <a
@@ -56,8 +56,8 @@ export default function CertificatesSection() {
                 rel="noreferrer"
                 className="group relative flex flex-col sm:flex-row sm:items-center justify-between py-8 cursor-pointer block transition-colors duration-300"
                 style={{ 
-                  borderBottom: "1px solid rgba(147, 171, 146, 0.2)",
-                  backgroundColor: hoveredCert?.id === cert.id ? "rgba(147, 171, 146, 0.05)" : "transparent"
+                  borderBottom: "1px solid var(--border)",
+                  backgroundColor: hoveredCert?.id === cert.id ? "var(--accent-soft)" : "transparent"
                 }}
                 onMouseEnter={() => setHoveredCert(cert)}
                 onMouseLeave={() => setHoveredCert(null)}
@@ -66,7 +66,7 @@ export default function CertificatesSection() {
                 <div className="flex items-start gap-5 sm:gap-8 flex-1">
                   <span 
                     className="font-mono text-xs font-bold tracking-widest pt-1 shrink-0"
-                    style={{ color: "#93ab92" }}
+                    style={{ color: "var(--accent)" }}
                   >
                     {cert.number}
                   </span>
@@ -74,7 +74,7 @@ export default function CertificatesSection() {
                   <div className="flex flex-col gap-3 sm:gap-1 flex-1">
                     <h3 
                       className="text-xl font-bold tracking-tight sm:text-3xl leading-snug flex items-center gap-3 transition-colors duration-300"
-                      style={{ color: hoveredCert?.id === cert.id ? "#93ab92" : "#1a211b" }}
+                      style={{ color: hoveredCert?.id === cert.id ? "var(--accent)" : "var(--text-h)" }}
                     >
                       {cert.title}
                       {/* Animated Arrow */}
@@ -84,17 +84,17 @@ export default function CertificatesSection() {
                     </h3>
                     
                     <div className="flex sm:hidden items-center justify-start gap-4 w-full font-mono text-[10px] pt-2">
-                      <span className="tracking-wider" style={{ color: "#4b524d" }}>{cert.date}</span>
-                      <span className="tracking-widest uppercase" style={{ color: "#1a211b" }}>{cert.issuer}</span>
+                      <span className="tracking-wider" style={{ color: "var(--text)" }}>{cert.date}</span>
+                      <span className="tracking-widest uppercase" style={{ color: "var(--text-h)" }}>{cert.issuer}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="hidden sm:flex flex-col items-end gap-1 shrink-0 pl-8">
-                  <span className="font-mono text-xs" style={{ color: "#4b524d" }}>
+                  <span className="font-mono text-xs" style={{ color: "var(--text)" }}>
                     {cert.date}
                   </span>
-                  <span className="font-mono text-xs tracking-wider uppercase" style={{ color: "#1a211b" }}>
+                  <span className="font-mono text-xs tracking-wider uppercase" style={{ color: "var(--text-h)" }}>
                     {cert.issuer}
                   </span>
                 </div>
@@ -109,7 +109,7 @@ export default function CertificatesSection() {
       {/* Hover Image Preview (Kept dark for a sleek popup contrast) */}
       {hoveredCert && (
         <div 
-          className="pointer-events-none fixed z-50 hidden md:block overflow-hidden rounded-xl border border-white/20 bg-[#111] shadow-2xl transition-all duration-150 ease-out"
+          className="pointer-events-none fixed z-50 hidden md:block overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] shadow-2xl transition-all duration-150 ease-out"
           style={{
             top: `${mousePos.y - 120}px`,
             left: `${mousePos.x + 30}px`,

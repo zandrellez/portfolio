@@ -2,19 +2,39 @@
 
 :root {
   --bg: #fdfdf5;
+  --surface: #ffffff;
+  --surface-raised: #f4f4ee;
   --text: #4b524d;
   --text-h: #1a211b;
+  --muted: #68736a;
   --border: #e2e4dc;
   --code-bg: #f4f4ee;
   --accent: #93ab92;
   --accent-glow: rgba(147, 171, 146, 0.2);
+  --accent-soft: rgba(147, 171, 146, 0.12);
+  --warning: #a66a16;
+  --shadow: 0 20px 50px rgba(26, 33, 27, 0.12);
+  --nav-bg: #101014;
+  --nav-text: #fdfdf5;
+  --contrast-bg: #0d1110;
+  --contrast-surface: #141a16;
+  --contrast-surface-raised: #1b241e;
+  --contrast-text: #a3b3a4;
+  --contrast-text-h: #f1f5f2;
+  --contrast-muted: #89988b;
+  --contrast-border: #2a352c;
+  --contrast-accent: #a3e635;
+  --contrast-accent-glow: rgba(163, 230, 53, 0.25);
+  --contrast-accent-soft: rgba(163, 230, 53, 0.12);
+  --contrast-warning: #d29922;
+  --contrast-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   
   --sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 16px/150% var(--sans);
   letter-spacing: 0.15px;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -22,16 +42,35 @@
   -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d1110;
-    --text: #a3b3a4;
-    --text-h: #f1f5f2;
-    --border: #232b24;
-    --code-bg: #161d18;
-    --accent: #a3e635; /* Neon lime/green for dark mode */
-    --accent-glow: rgba(163, 230, 53, 0.25);
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1110;
+  --surface: #141a16;
+  --surface-raised: #1b241e;
+  --text: #a3b3a4;
+  --text-h: #f1f5f2;
+  --muted: #89988b;
+  --border: #2a352c;
+  --code-bg: #161d18;
+  --accent: #a3e635;
+  --accent-glow: rgba(163, 230, 53, 0.25);
+  --accent-soft: rgba(163, 230, 53, 0.12);
+  --warning: #d29922;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  --nav-bg: #fdfdf5;
+  --nav-text: #1a211b;
+  --contrast-bg: #fdfdf5;
+  --contrast-surface: #ffffff;
+  --contrast-surface-raised: #f4f4ee;
+  --contrast-text: #4b524d;
+  --contrast-text-h: #1a211b;
+  --contrast-muted: #68736a;
+  --contrast-border: #e2e4dc;
+  --contrast-accent: #93ab92;
+  --contrast-accent-glow: rgba(147, 171, 146, 0.2);
+  --contrast-accent-soft: rgba(147, 171, 146, 0.12);
+  --contrast-warning: #a66a16;
+  --contrast-shadow: 0 20px 50px rgba(26, 33, 27, 0.12);
 }
 
 #root {
@@ -50,6 +89,10 @@ html, body {
   background-color: var(--bg);
   color: var(--text);
   overflow-x: clip;
+}
+
+body {
+  transition: background-color 250ms ease, color 250ms ease;
 }
 
 /* -------------------------------------------------------------------------- */

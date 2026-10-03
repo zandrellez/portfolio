@@ -148,6 +148,8 @@ export interface FullscreenNavProps {
   ease?: string;
   headerOpenColor?: string;
   headerClosedColor?: string;
+  theme?: "light" | "dark";
+  onThemeToggle?: () => void;
   onOpen?: () => void;
   onClose?: () => void;
   children?: (isOpen: boolean) => ReactNode;
@@ -169,6 +171,8 @@ function FullscreenNav({
   ease = "power4.inOut",
   headerOpenColor = "#fdfdf5",
   headerClosedColor = "#1a211b",
+  theme = "light",
+  onThemeToggle,
   onOpen,
   onClose,
   children,
@@ -326,33 +330,53 @@ function FullscreenNav({
           )}
         </a>
 
-        {/* TOGGLE BUTTON: Always visible and clickable */}
-        <button
-          ref={toggleButtonRef}
-          onClick={onToggleMenu}
-          aria-label="Toggle menu"
-          aria-expanded={isOpen}
-          className="flex size-10 cursor-pointer flex-col items-center justify-center gap-1.5 pointer-events-auto"
-        >
-          <span
-            style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
-            className={`block h-[2px] w-8 transition-all duration-700 ease-in-out delay-300 motion-reduce:transition-none ${
-              isOpen ? "translate-y-[8px] rotate-45" : isReducedMotion ? "translate-y-0 rotate-0" : ""
-            }`}
-          />
-          <span
-            style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
-            className={`block h-[2px] w-8 transition-all duration-500 delay-300 motion-reduce:transition-none ${
-              isOpen ? "scale-x-0 opacity-0" : isReducedMotion ? "scale-x-100 opacity-100" : ""
-            }`}
-          />
-          <span
-            style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
-            className={`block h-[2px] w-8 transition-all duration-700 ease-in-out delay-300 motion-reduce:transition-none ${
-              isOpen ? "-translate-y-[8px] -rotate-45" : isReducedMotion ? "translate-y-0 rotate-0" : ""
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-3 pointer-events-auto">
+          <button
+            type="button"
+            onClick={onThemeToggle}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            className="flex size-10 cursor-pointer items-center justify-center rounded-full border border-current/30 transition-colors hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-4"
+            style={{ color: isOpen ? headerOpenColor : "var(--text-h)" }}
+          >
+            {theme === "dark" ? (
+              <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M20.9 13A8.5 8.5 0 0 1 11 3.1 8.5 8.5 0 1 0 20.9 13Z" />
+              </svg>
+            )}
+          </button>
+          <button
+            ref={toggleButtonRef}
+            onClick={onToggleMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+            className="flex size-10 cursor-pointer flex-col items-center justify-center gap-1.5"
+          >
+            <span
+              style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
+              className={`block h-[2px] w-8 transition-all duration-700 ease-in-out delay-300 motion-reduce:transition-none ${
+                isOpen ? "translate-y-[8px] rotate-45" : isReducedMotion ? "translate-y-0 rotate-0" : ""
+              }`}
+            />
+            <span
+              style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
+              className={`block h-[2px] w-8 transition-all duration-500 delay-300 motion-reduce:transition-none ${
+                isOpen ? "scale-x-0 opacity-0" : isReducedMotion ? "scale-x-100 opacity-100" : ""
+              }`}
+            />
+            <span
+              style={{ backgroundColor: isOpen ? headerOpenColor : headerClosedColor }}
+              className={`block h-[2px] w-8 transition-all duration-700 ease-in-out delay-300 motion-reduce:transition-none ${
+                isOpen ? "-translate-y-[8px] -rotate-45" : isReducedMotion ? "translate-y-0 rotate-0" : ""
+              }`}
+            />
+          </button>
+        </div>
       </header>
 
       <nav
@@ -608,7 +632,7 @@ function CustomNavbar({
   }, [delay, imageDuration, imageStagger, imageStartScale, isOpen, linkDuration, linkOffsetY, linkStagger, socialDuration, socialOffsetY, socialStagger]);
 
   return (
-    <div style={{ backgroundColor: overlayBg, color: "#fdfdf5" }} className="flex min-h-screen w-full flex-col justify-between gap-10 px-10 md:px-28 py-10 pt-28">
+    <div style={{ backgroundColor: overlayBg, color: "var(--nav-text)" }} className="flex min-h-screen w-full flex-col justify-between gap-10 px-10 md:px-28 py-10 pt-28">
       
       <div className="flex items-center justify-between gap-10 max-[1025px]:flex-col max-[1025px]:items-start max-[1025px]:gap-18 mt-8">
         
@@ -625,7 +649,7 @@ function CustomNavbar({
         <div className="flex h-full flex-col items-center justify-center gap-10 py-5 max-[1025px]:w-full max-[1025px]:items-center max-[1025px]:py-0">
           
           {tagline && (
-            <p ref={taglineRef} className="text-sm font-mono tracking-widest uppercase opacity-70 text-center text-[#93ab92]">
+            <p ref={taglineRef} className="text-sm font-mono tracking-widest uppercase opacity-70 text-center text-[var(--accent)]">
               {tagline}
             </p>
           )}
@@ -640,7 +664,7 @@ function CustomNavbar({
                 href={item.href}
                 ref={setImageRef(index)}
                 style={{ opacity: 0, transform: `scale(${IMAGE_INITIAL_SCALE})` }}
-                className="relative h-[18vw] w-[22vw] overflow-hidden rounded-xl group cursor-pointer max-[1025px]:h-[40vw] max-[1025px]:w-[80vw] block border border-[#93ab92]/20"
+                className="relative h-[18vw] w-[22vw] overflow-hidden rounded-xl group cursor-pointer max-[1025px]:h-[40vw] max-[1025px]:w-[80vw] block border border-[var(--accent)]/20"
             >
                 <img 
                 src={item.src} 
@@ -662,7 +686,7 @@ function CustomNavbar({
       <div className="flex items-end justify-between max-[1025px]:pb-10">
         <div className="flex items-end gap-6">
           {socials.map((social, index) => (
-            <a key={index} href={social.href} target="_blank" rel="noopener noreferrer" ref={setSocialRef(index)} style={{ opacity: 0, transform: `translateY(${socialOffsetY}px)` }} className="hover:text-[#93ab92] transition-colors">
+              <a key={index} href={social.href} target="_blank" rel="noopener noreferrer" ref={setSocialRef(index)} style={{ opacity: 0, transform: `translateY(${socialOffsetY}px)` }} className="hover:text-[var(--accent)] transition-colors">
               {SOCIAL_ICONS[social.type]}
             </a>
           ))}
@@ -734,6 +758,8 @@ export interface ImmersiveFullscreenNavProps {
   socialDuration?: number;
   socialStagger?: number;
   socialOffsetY?: number;
+  theme?: "light" | "dark";
+  onThemeToggle?: () => void;
 }
 
 export default function ImmersiveFullscreenNav({ navConfig = NAV_CONFIG, navContent = NAV_CONTENT, ...props }: ImmersiveFullscreenNavProps) {
@@ -773,6 +799,8 @@ export default function ImmersiveFullscreenNav({ navConfig = NAV_CONFIG, navCont
     ...(clipOrigin !== undefined ? { clipOrigin } : {}),
     ...(openDuration !== undefined ? { openDuration } : {}),
     ...(closeDuration !== undefined ? { closeDuration } : {}),
+    ...(props.theme !== undefined ? { theme: props.theme } : {}),
+    ...(props.onThemeToggle !== undefined ? { onThemeToggle: props.onThemeToggle } : {}),
   };
 
   const content = {

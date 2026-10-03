@@ -272,7 +272,7 @@ const CSS = `
 .mph-l4:hover .mph-star{transform:rotate(180deg) scale(1.2);}
 
 .mph-pill{position:absolute;left:8.8%;top:85%;display:flex;align-items:stretch;font-size:1.72cqw;font-weight:800;line-height:1;}
-.mph-pill-a{position:relative;z-index:1;background:#fff;color:var(--mph-ink);border:.16cqw solid var(--mph-ink);border-radius:999px;padding:.72em 1.25em;}
+.mph-pill-a{position:relative;z-index:1;background:var(--mph-paper);color:var(--mph-ink);border:.16cqw solid var(--mph-ink);border-radius:999px;padding:.72em 1.25em;}
 .mph-pill-b{display:inline-flex;align-items:center;gap:.5em;margin-left:-1.4em;padding:.72em 3.4em .72em 3.1em;background:var(--mph-accent);color:var(--mph-ink);border:.16cqw solid var(--mph-ink);border-radius:0 999px 999px 0;text-decoration:none;transition:background .25s,color .25s,padding .35s cubic-bezier(.3,1.4,.5,1);}
 .mph-pill-b em{font-style:normal;display:inline-block;width:0;overflow:hidden;opacity:0;transition:width .35s,opacity .25s;}
 .mph-pill-b:hover,.mph-pill-b:focus-visible{background:var(--mph-ink);color:var(--mph-paper);padding-right:2.4em;outline:none;}
@@ -281,7 +281,7 @@ const CSS = `
 .mph-flower{position:absolute;left:35.4%;top:64%;width:7.4%;aspect-ratio:1;animation:mph-spin 22s linear infinite;cursor:grab;}
 .mph-flower svg{display:block;width:100%;height:100%;overflow:visible;transition:transform .5s cubic-bezier(.3,1.8,.5,1);}
 .mph-flower:hover svg{transform:scale(1.18) rotate(40deg);}
-.mph-flower path{fill:#fff;stroke:var(--mph-ink);stroke-width:2.6;stroke-linejoin:round;}
+.mph-flower path{fill:var(--mph-paper);stroke:var(--mph-ink);stroke-width:2.6;stroke-linejoin:round;}
 .mph-curl{position:absolute;left:43.2%;top:52.5%;width:5.6%;aspect-ratio:1;overflow:visible;pointer-events:none;}
 .mph-curl path{fill:none;stroke:var(--mph-ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:mph-draw 1.4s 1s cubic-bezier(.6,0,.2,1) both;}
 
@@ -300,7 +300,7 @@ const CSS = `
 .mph-char:active{transform:scale(.97);}
 .mph-char:focus-visible{outline:.2cqw dashed var(--mph-ink);outline-offset:.4cqw;}
 .mph-char svg{display:block;width:100%;height:100%;overflow:visible;}
-.mph-bubble{position:absolute;left:82%;top:10%;max-width:52%;background:#fff;color:var(--mph-ink);border:.16cqw solid var(--mph-ink);border-radius:1.4em 1.4em 1.4em .2em;padding:.8em 1.1em;font-size:1.1cqw;font-weight:800;line-height:1.2;text-align:left;box-shadow:.35cqw .35cqw 0 var(--mph-accent);transform-origin:0 100%;transform:scale(0) rotate(-8deg);opacity:0;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .2s;pointer-events:none;}
+.mph-bubble{position:absolute;left:82%;top:10%;max-width:52%;background:var(--mph-paper);color:var(--mph-ink);border:.16cqw solid var(--mph-ink);border-radius:1.4em 1.4em 1.4em .2em;padding:.8em 1.1em;font-size:1.1cqw;font-weight:800;line-height:1.2;text-align:left;box-shadow:.35cqw .35cqw 0 var(--mph-accent);transform-origin:0 100%;transform:scale(0) rotate(-8deg);opacity:0;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .2s;pointer-events:none;}
 .mph-bubble[data-on="true"]{transform:scale(1) rotate(-4deg);opacity:1;}
 
 @keyframes mph-draw{from{stroke-dashoffset:1;}to{stroke-dashoffset:0;}}
@@ -366,9 +366,9 @@ export default function MascotHero({
   shirt = "#3e5260",
   collar = "#cdd3d6",
   frames = "#3b3321",
-  accent = "#93ab92",
-  paper = "#fdfdf5",
-  ink = "#111111",
+  accent = "var(--accent)",
+  paper = "var(--bg)",
+  ink = "var(--text-h)",
   className,
 }: MascotPortfolioHeroProps) {
   // Gradient and filter ids are global. Two heroes on one page would otherwise

@@ -81,7 +81,7 @@ function getTechIcon(name: string) {
   return <Cpu />
 }
 
-// Cube face (Forced Dark Background, Light Text)
+// Cube face
 function CubeFace({
   face,
   transform,
@@ -91,23 +91,23 @@ function CubeFace({
 }) {
   return (
     <div
-      className="absolute inset-0 flex flex-col items-center justify-center border border-white/15 bg-[#111111] backdrop-blur-md backface-hidden shadow-xl"
+      className="absolute inset-0 flex flex-col items-center justify-center border border-[var(--contrast-border)] bg-[var(--contrast-surface)] backdrop-blur-md backface-hidden shadow-xl"
       style={{ transform }}
     >
-      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06]">
-        <span style={{ color: "#93ab92" }}>
+      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--contrast-border)] bg-[var(--contrast-accent-soft)]">
+        <span style={{ color: "var(--contrast-accent)" }}>
           {getTechIcon(face.name)}
         </span>
       </div>
 
       <span 
         className="text-xs font-mono font-medium uppercase tracking-[0.18em]"
-        style={{ color: "rgba(255,255,255,0.45)" }}
+        style={{ color: "var(--contrast-muted)" }}
       >
         {face.short}
       </span>
 
-      <span className="mt-1 text-sm font-medium" style={{ color: "#ffffff" }}>
+      <span className="mt-1 text-sm font-medium" style={{ color: "var(--contrast-text-h)" }}>
         {face.name}
       </span>
     </div>
@@ -125,7 +125,7 @@ function ServiceCube({
 
   return (
     <div className="relative flex h-[200px] w-[200px] items-center justify-center sm:h-[260px] sm:w-[260px] lg:h-[340px] lg:w-[340px]">
-      <div className="absolute h-[140px] w-[140px] rounded-full bg-[#93ab92]/15 blur-3xl" />
+      <div className="absolute h-[140px] w-[140px] rounded-full bg-[var(--contrast-accent-soft)] blur-3xl" />
 
       <div
         className="relative h-[140px] w-[140px] sm:h-[180px] sm:w-[180px] lg:h-[230px] lg:w-[230px]"
@@ -163,7 +163,7 @@ function ServiceCube({
   )
 }
 
-// Service content (Forced Dark Text using Inline Styles)
+// Service content
 function ServiceContent({
   service,
 }: {
@@ -172,22 +172,22 @@ function ServiceContent({
   return (
     <div className="flex h-full w-full max-w-[620px] flex-col justify-center px-4 py-6 sm:px-10 lg:py-12">
       <div className="mb-3 lg:mb-5 flex items-center gap-3">
-        <span className="h-px w-8" style={{ backgroundColor: "#93ab92" }} />
-        <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em]" style={{ color: "#93ab92" }}>
+        <span className="h-px w-8" style={{ backgroundColor: "var(--accent)" }} />
+          <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em]" style={{ color: "var(--accent)" }}>
           Service
         </span>
       </div>
 
       <h2 
         className="max-w-xl text-2xl sm:text-4xl lg:text-6xl font-bold tracking-tight"
-        style={{ color: "#1a211b" }}
+        style={{ color: "var(--text-h)" }}
       >
         {service.title}
       </h2>
 
       <p 
         className="mt-3 lg:mt-5 max-w-lg text-xs sm:text-sm lg:text-base leading-relaxed"
-        style={{ color: "#4b524d" }}
+        style={{ color: "var(--text)" }}
       >
         {service.subtitle}
       </p>
@@ -197,15 +197,15 @@ function ServiceContent({
           <div key={slot.title} className="group flex gap-3 lg:gap-4">
             <span 
               className="mt-1 text-[11px] font-mono font-bold tracking-[0.2em]"
-              style={{ color: "#93ab92" }}
+              style={{ color: "var(--accent)" }}
             >
               0{index + 1}
             </span>
             <div>
-              <h3 className="text-sm sm:text-base font-bold" style={{ color: "#1a211b" }}>
+              <h3 className="text-sm sm:text-base font-bold" style={{ color: "var(--text-h)" }}>
                 {slot.title}
               </h3>
-              <p className="mt-1 max-w-md text-xs sm:text-sm leading-relaxed" style={{ color: "#4b524d" }}>
+              <p className="mt-1 max-w-md text-xs sm:text-sm leading-relaxed" style={{ color: "var(--text)" }}>
                 {slot.description}
               </p>
             </div>
@@ -254,10 +254,10 @@ function MarqueeRow({
             key={`${tool}-${index}`} 
             className="flex items-center gap-3 opacity-70 transition-opacity duration-300 hover:opacity-100"
           >
-            <span className="[&>svg]:h-7 [&>svg]:w-7 sm:[&>svg]:h-9 sm:[&>svg]:w-9" style={{ color: "#93ab92" }}>
+            <span className="[&>svg]:h-7 [&>svg]:w-7 sm:[&>svg]:h-9 sm:[&>svg]:w-9" style={{ color: "var(--accent)" }}>
               {getTechIcon(tool)}
             </span>
-            <span className="font-sans text-3xl font-bold tracking-tighter sm:text-5xl" style={{ color: "#1a211b" }}>
+            <span className="font-sans text-3xl font-bold tracking-tighter sm:text-5xl" style={{ color: "var(--text-h)" }}>
               {tool}
             </span>
           </div>
@@ -328,12 +328,12 @@ export default function ServicesSection() {
   const mSecondOpacity = clamp(progress * 1.8, 0, 1)
 
   return (
-    <section style={{ backgroundColor: "#fdfdf5" }}>
+    <section style={{ backgroundColor: "var(--bg)" }}>
       
       <div ref={sectionRef} className="relative h-[250vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#93ab92]/10 blur-[120px]" />
+            <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent-soft)] blur-[120px]" />
           </div>
 
           <div className="relative mx-auto h-full max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -448,12 +448,12 @@ export default function ServicesSection() {
         </div>
       </div>
 
-      <div className="relative py-24 sm:py-32 border-t border-[#93ab92]/20">
+      <div className="relative py-24 sm:py-32 border-t border-[var(--border)]">
         <div className="mx-auto mb-16 max-w-4xl px-6 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl" style={{ color: "#1a211b" }}>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl" style={{ color: "var(--text-h)" }}>
             Engineered with technologies powering
           </h2>
-          <p className="mt-6 text-base leading-8 sm:text-xl" style={{ color: "#4b524d" }}>
+          <p className="mt-6 text-base leading-8 sm:text-xl" style={{ color: "var(--text)" }}>
             Integrating the modern ecosystem driving today's most ambitious scalable products.
           </p>
         </div>
