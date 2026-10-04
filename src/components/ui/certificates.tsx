@@ -38,7 +38,7 @@ export default function CertificatesSection() {
               className="max-w-sm text-sm leading-relaxed sm:text-base"
               style={{ color: "var(--text)" }}
             >
-              Here's a list of some certificates and credentials that I've earned so far!
+              Continuous learning, formal credentials, and validated technical foundations.
             </p>
           </div>
 

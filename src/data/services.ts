@@ -23,7 +23,7 @@ export const services: Service[] = [
     id: "full-stack",
     title: "Full-Stack Engineering",
     subtitle:
-      "Designing and building reliable digital products from database to interface.",
+      "Outcome-driven digital products that scale smoothly and feel effortless to use.",
 
     cube: [
       { name: "JavaScript", short: "JS" },
@@ -36,19 +36,19 @@ export const services: Service[] = [
 
     slots: [
       {
-        title: "Frontend Development",
+        title: "User-Centric Web Apps",
         description:
-          "Responsive, accessible interfaces built around clear interactions, reusable components, and maintainable UI architecture.",
+          "High-converting web and mobile interfaces that feel effortless to navigate, built around modular UI components and accessible design systems.",
       },
       {
-        title: "Backend & APIs",
+        title: "High-Performance Backend Systems",
         description:
-          "Structured backend systems, REST APIs, authentication, business logic, and database-driven workflows.",
+          "Zero-downtime application logic and data structures, engineered through structured API endpoints, secure authentication, and optimized schemas.",
       },
       {
-        title: "System Integration",
+        title: "Third-Party Integrations",
         description:
-          "Connecting frontend, backend, third-party services, and external APIs into one cohesive product.",
+          "Unified software ecosystems with zero data silos, created by connecting your core application directly to external services and platform APIs.",
       },
     ],
   },
@@ -57,32 +57,32 @@ export const services: Service[] = [
     id: "ai-automation",
     title: "AI Automation",
     subtitle:
-      "Turning repetitive processes into intelligent workflows that save time and reduce manual work.",
+      "Intelligent automation pipelines that eliminate manual tasks and save hours of work.",
 
     cube: [
       { name: "Python", short: "PY" },
       { name: "OpenAI", short: "AI" },
       { name: "n8n", short: "N8N" },
-      { name: "OCR", short: "OCR" },
       { name: "APIs", short: "API" },
-      { name: "Supabase", short: "SB" },
+      { name: "ChatGPT", short: "GPT" },
+      { name: "Claude", short: "CL" },
     ],
 
     slots: [
       {
-        title: "Workflow Automation",
+        title: "Automated Workflows",
         description:
-          "Automating repetitive processes with connected triggers, actions, APIs, databases, and intelligent decision points.",
+          "Hours of repetitive operational work saved daily, delivered through custom event-driven automation pipelines connecting your entire software stack.",
       },
       {
-        title: "AI-Powered Processing",
+        title: "Smart Data Extraction",
         description:
-          "Using LLMs, OCR, and structured data pipelines to extract information and turn unstructured input into useful data.",
+          "Instant conversion of messy files, emails, and PDFs into structured database records, powered by intelligent document parsing and language processing.",
       },
       {
-        title: "Intelligent Integrations",
+        title: "Embedded AI Features",
         description:
-          "Connecting AI services with existing applications to create practical automation instead of isolated AI features.",
+          "Smart, context-aware capabilities built into your web applications, enabled by integrating tailored language models and custom knowledge bases.",
       },
     ],
   },

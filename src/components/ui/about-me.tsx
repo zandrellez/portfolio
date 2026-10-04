@@ -15,21 +15,21 @@ const sections: AboutSection[] = [
     number: "01",
     title: "THE HOOK",
     description:
-      "I am a Full-Stack & Automation Engineer who builds secure, scalable architectures so businesses can operate without friction.",
+      "I am a Full-Stack Developer & AI Automation Specialist who turns complex technical challenges into intuitive, human-centered software. I build scalable web apps and intelligent workflows that eliminate manual friction so businesses can run effortlessly.",
   },
   {
     id: "story",
     number: "02",
     title: "THE STORY",
     description:
-      "With a Cum Laude background in Information Technology and a specialization in Cybersecurity, I view development through a security-first, systems-level lens. Transitioning from leading traditional full-stack builds to architecting AI-powered data pipelines made me realize my true edge: I don't just write code; I design workflows that give people their time back.",
+      "Leading full-stack builds during my internship and capstone projects taught me that the best software isn't just about clean code, but about the person using it. I leverage modern AI tools to accelerate production so I can focus heavily on real pain points, intuitive user flows, and practical utility.",
   },
   {
     id: "promise",
     number: "03",
     title: "THE PROMISE",
     description:
-      "When you work with me, you get a proactive engineering partner who ships production-ready solutions, anticipates edge cases, and never leaves a system vulnerable or unoptimized.",
+      "When you work with me, you get a proactive engineering partner who ships production-ready solutions fast, respects the human experience behind every screen, and ensures your software is as reliable as it is effortless to use.",
   },
 ]
 
@@ -429,7 +429,6 @@ export default function AboutMe() {
 
         <main className="about-content">
           <div className="about-intro">
-            <span className="about-intro-label">// The Manifesto</span>
             <h1 className="about-intro-title">
               Engineering <em>clarity</em>
               <br />
@@ -446,8 +445,8 @@ export default function AboutMe() {
               className="about-story"
             >
               <div className="about-story-header">
-                <span className="about-story-number">[ {section.number} // {section.title} ]</span>
                 <span className="about-story-line" />
+                <span className="about-story-number">[ {section.title} ]</span>
               </div>
 
               <p className="about-story-description">

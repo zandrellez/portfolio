@@ -5,8 +5,8 @@ export type ProcessPhase = {
 };
 
 export const processMeta = {
-  title: "DEVELOPMENT PROCESS",
-  periodLabel: "HOW I WORK",
+  title: "PROCESS",
+  periodLabel: "How I transform raw problems into production-ready software.",
   imageUrl:
     "https://cdn.21st.dev/assets/mirror/b0/b0c41784074f76ac5fb6b447da87780c901135841317a096241371f24bc13ddd.jpg",
   imageAlt: "Developer workspace",
@@ -14,23 +14,28 @@ export const processMeta = {
 
 export const processPhases: ProcessPhase[] = [
   {
-    title: "DISCOVERY",
+    title: "DISCOVER",
     description:
-      "I start by listening: goals, users, constraints, and what success looks like.",
+      "Uncovering core operational bottlenecks and defining the exact user value, branding, and outcome the project must achieve.",
   },
   {
-    title: "PLANNING",
+    title: "MAP",
     description:
-      "Requirements become a scoped roadmap, a tech stack, and milestones you can track.",
+      "Transforming requirements into structured user flows, wireframes, and database schemas before writing a single line of code.",
   },
   {
-    title: "DESIGN",
+    title: "BUILD",
     description:
-      "Wireframes and UI systems are shaped and tested before a line of code ships.",
+      "Rapidly engineering full-stack components and automation pipelines using modern AI workflows to ship production-grade code fast.",
   },
   {
-    title: "DEVELOPMENT",
+    title: "TEST",
     description:
-      "Clean, typed, component-driven code built in small iterations with regular check-ins.",
+      "Rigorously auditing user interface polish, edge cases, API reliability, and system performance to ensure zero friction.",
+  },  
+  {
+    title: "SHIP",
+    description:
+      "Launching production-ready systems paired with clean documentation and handover guides for seamless long-term maintenance.",
   },
 ];

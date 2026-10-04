@@ -81,7 +81,7 @@ function getTechIcon(name: string) {
   return <Cpu />
 }
 
-// Cube face
+// Cube face component
 function CubeFace({
   face,
   transform,
@@ -91,23 +91,23 @@ function CubeFace({
 }) {
   return (
     <div
-      className="absolute inset-0 flex flex-col items-center justify-center border border-[var(--contrast-border)] bg-[var(--contrast-surface)] backdrop-blur-md backface-hidden shadow-xl"
+      className="absolute inset-0 flex flex-col items-center justify-center border border-[var(--contrast-border)] bg-[var(--contrast-surface)] backdrop-blur-md backface-hidden shadow-xl p-2"
       style={{ transform }}
     >
-      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--contrast-border)] bg-[var(--contrast-accent-soft)]">
-        <span style={{ color: "var(--contrast-accent)" }}>
+      <div className="mb-2 flex h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-xl border border-[var(--contrast-border)] bg-[var(--contrast-accent-soft)]">
+        <span style={{ color: "var(--contrast-accent)" }} className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-6 sm:[&>svg]:w-6">
           {getTechIcon(face.name)}
         </span>
       </div>
 
       <span 
-        className="text-xs font-mono font-medium uppercase tracking-[0.18em]"
+        className="text-[9px] sm:text-xs font-mono font-medium uppercase tracking-[0.18em]"
         style={{ color: "var(--contrast-muted)" }}
       >
         {face.short}
       </span>
 
-      <span className="mt-1 text-sm font-medium" style={{ color: "var(--contrast-text-h)" }}>
+      <span className="mt-0.5 sm:mt-1 text-[11px] sm:text-sm font-medium text-center truncate px-1" style={{ color: "var(--contrast-text-h)" }}>
         {face.name}
       </span>
     </div>
@@ -124,14 +124,18 @@ function ServiceCube({
   const faces = service.cube
 
   return (
-    <div className="relative flex h-[200px] w-[200px] items-center justify-center sm:h-[260px] sm:w-[260px] lg:h-[340px] lg:w-[340px]">
-      <div className="absolute h-[140px] w-[140px] rounded-full bg-[var(--contrast-accent-soft)] blur-3xl" />
+    <div className="relative flex h-[130px] w-[130px] sm:h-[220px] sm:w-[220px] lg:h-[340px] lg:w-[340px] items-center justify-center cube-wrapper">
+      <div className="absolute h-[80px] w-[80px] sm:h-[140px] sm:w-[140px] rounded-full bg-[var(--contrast-accent-soft)] blur-3xl" />
 
       <div
-        className="relative h-[140px] w-[140px] sm:h-[180px] sm:w-[180px] lg:h-[230px] lg:w-[230px]"
+        className="relative h-[100px] w-[100px] sm:h-[160px] sm:w-[160px] lg:h-[230px] lg:w-[230px]"
         style={{ perspective: "1000px" }}
       >
         <style>{`
+          .cube-wrapper { --tz: 50px; }
+          @media (min-width: 640px) { .cube-wrapper { --tz: 80px; } }
+          @media (min-width: 1024px) { .cube-wrapper { --tz: 115px; } }
+
           @keyframes spin-cube {
             0% { transform: rotateX(-18deg) rotateY(0deg); }
             100% { transform: rotateX(342deg) rotateY(360deg); }
@@ -151,29 +155,29 @@ function ServiceCube({
               : "spin-cube 12s linear infinite"
           }}
         >
-          <CubeFace face={faces[0]} transform="translateZ(115px)" />
-          <CubeFace face={faces[1]} transform="rotateY(180deg) translateZ(115px)" />
-          <CubeFace face={faces[2]} transform="rotateY(90deg) translateZ(115px)" />
-          <CubeFace face={faces[3]} transform="rotateY(-90deg) translateZ(115px)" />
-          <CubeFace face={faces[4]} transform="rotateX(90deg) translateZ(115px)" />
-          <CubeFace face={faces[5]} transform="rotateX(-90deg) translateZ(115px)" />
+          {/* Using responsive CSS variable for translation depth */}
+          <CubeFace face={faces[0]} transform="translateZ(var(--tz))" />
+          <CubeFace face={faces[1]} transform="rotateY(180deg) translateZ(var(--tz))" />
+          <CubeFace face={faces[2]} transform="rotateY(90deg) translateZ(var(--tz))" />
+          <CubeFace face={faces[3]} transform="rotateY(-90deg) translateZ(var(--tz))" />
+          <CubeFace face={faces[4]} transform="rotateX(90deg) translateZ(var(--tz))" />
+          <CubeFace face={faces[5]} transform="rotateX(-90deg) translateZ(var(--tz))" />
         </div>
       </div>
     </div>
   )
 }
 
-// Service content
 function ServiceContent({
   service,
 }: {
   service: Service
 }) {
   return (
-    <div className="flex h-full w-full max-w-[620px] flex-col justify-center px-4 py-6 sm:px-10 lg:py-12">
-      <div className="mb-3 lg:mb-5 flex items-center gap-3">
-        <span className="h-px w-8" style={{ backgroundColor: "var(--accent)" }} />
-          <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em]" style={{ color: "var(--accent)" }}>
+    <div className="flex w-full max-w-[620px] flex-col justify-center px-4 py-2 sm:px-10 lg:py-12">
+      <div className="mb-1.5 lg:mb-5 flex items-center gap-3">
+        <span className="h-px w-6 lg:w-8" style={{ backgroundColor: "var(--accent)" }} />
+        <span className="text-[10px] font-mono font-bold uppercase tracking-[0.25em]" style={{ color: "var(--accent)" }}>
           Service
         </span>
       </div>
@@ -186,26 +190,26 @@ function ServiceContent({
       </h2>
 
       <p 
-        className="mt-3 lg:mt-5 max-w-lg text-xs sm:text-sm lg:text-base leading-relaxed"
+        className="mt-1.5 lg:mt-5 max-w-lg text-xs sm:text-sm lg:text-base leading-relaxed"
         style={{ color: "var(--text)" }}
       >
         {service.subtitle}
       </p>
 
-      <div className="mt-5 lg:mt-8 space-y-3 lg:space-y-5">
+      <div className="mt-4 lg:mt-8 space-y-3 lg:space-y-5">
         {service.slots.map((slot, index) => (
-          <div key={slot.title} className="group flex gap-3 lg:gap-4">
+          <div key={slot.title} className="group flex gap-2.5 lg:gap-4">
             <span 
-              className="mt-1 text-[11px] font-mono font-bold tracking-[0.2em]"
+              className="mt-0.5 text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.2em]"
               style={{ color: "var(--accent)" }}
             >
               0{index + 1}
             </span>
             <div>
-              <h3 className="text-sm sm:text-base font-bold" style={{ color: "var(--text-h)" }}>
+              <h3 className="text-xs sm:text-base font-bold leading-tight" style={{ color: "var(--text-h)" }}>
                 {slot.title}
               </h3>
-              <p className="mt-1 max-w-md text-xs sm:text-sm leading-relaxed" style={{ color: "var(--text)" }}>
+              <p className="mt-1 max-w-md text-[11px] sm:text-sm leading-snug sm:leading-relaxed" style={{ color: "var(--text)" }}>
                 {slot.description}
               </p>
             </div>
@@ -331,18 +335,18 @@ export default function ServicesSection() {
     <section style={{ backgroundColor: "var(--bg)" }}>
       
       <div ref={sectionRef} className="relative h-[250vh]">
-        <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="sticky top-0 h-screen overflow-hidden flex items-center">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent-soft)] blur-[120px]" />
           </div>
 
-          <div className="relative mx-auto h-full max-w-7xl px-5 sm:px-8 lg:px-12">
+          <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12 h-full lg:h-auto">
             
-            {/* Mobile View Service 1 Cube */}
+            {/* Mobile View Service 1 Cube (Perfectly spaced near the top) */}
             <div
-              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center pointer-events-none"
+              className="absolute inset-x-0 top-[5vh] flex lg:hidden justify-center pointer-events-none"
               style={{
-                transform: `translate3d(${mCube1X}vw, -22vh, 0)`,
+                transform: `translate3d(${mCube1X}vw, 0, 0)`,
                 opacity: mFirstOpacity,
                 willChange: "transform, opacity",
               }}
@@ -352,41 +356,41 @@ export default function ServicesSection() {
               </div>
             </div>
 
-            {/* Mobile View Service 1 Content */}
+            {/* Mobile View Service 1 Content (Sits cleanly below the cube) */}
             <div
-              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center overflow-y-auto pointer-events-none"
+              className="absolute inset-x-0 top-[27vh] flex lg:hidden justify-center pointer-events-none"
               style={{
-                transform: `translate3d(${mText1X}vw, 20vh, 0)`,
+                transform: `translate3d(${mText1X}vw, 0, 0)`,
                 opacity: mFirstOpacity,
                 pointerEvents: progress > 0.5 ? "none" : "auto",
                 willChange: "transform, opacity",
               }}
             >
-              <div className="pointer-events-auto w-full max-w-lg px-4">
+              <div className="pointer-events-auto w-full max-w-lg px-2">
                 <ServiceContent service={firstService} />
               </div>
             </div>
 
             {/* Mobile View Service 2 Content */}
             <div
-              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center overflow-y-auto pointer-events-none"
+              className="absolute inset-x-0 top-[27vh] flex lg:hidden justify-center pointer-events-none"
               style={{
-                transform: `translate3d(${mText2X}vw, 20vh, 0)`,
+                transform: `translate3d(${mText2X}vw, 0, 0)`,
                 opacity: mSecondOpacity,
                 pointerEvents: progress < 0.5 ? "none" : "auto",
                 willChange: "transform, opacity",
               }}
             >
-              <div className="pointer-events-auto w-full max-w-lg px-4">
+              <div className="pointer-events-auto w-full max-w-lg px-2">
                 <ServiceContent service={secondService} />
               </div>
             </div>
 
             {/* Mobile View Service 2 Cube */}
             <div
-              className="absolute inset-0 flex lg:hidden flex-col items-center justify-center pointer-events-none"
+              className="absolute inset-x-0 top-[5vh] flex lg:hidden justify-center pointer-events-none"
               style={{
-                transform: `translate3d(${mCube2X}vw, -22vh, 0)`,
+                transform: `translate3d(${mCube2X}vw, 0, 0)`,
                 opacity: mSecondOpacity,
                 willChange: "transform, opacity",
               }}
@@ -451,10 +455,10 @@ export default function ServicesSection() {
       <div className="relative py-24 sm:py-32 border-t border-[var(--border)]">
         <div className="mx-auto mb-16 max-w-4xl px-6 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl" style={{ color: "var(--text-h)" }}>
-            Engineered with technologies powering
+            The Toolkit
           </h2>
           <p className="mt-6 text-base leading-8 sm:text-xl" style={{ color: "var(--text)" }}>
-            Integrating the modern ecosystem driving today's most ambitious scalable products.
+            Modern technologies and intelligent platforms I leverage to architect scalable, high-speed software.
           </p>
         </div>
 

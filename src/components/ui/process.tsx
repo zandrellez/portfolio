@@ -296,10 +296,10 @@ export default function Process({
                 {title}
               </h2>
               <p
-                className="mt-[1.5vw] text-[16px] uppercase tracking-widest max-md:mt-[3vw]"
+                className="mt-[1.5vw] text-[16px] tracking-widest max-md:mt-[3vw]"
                 style={mutedStyle}
               >
-                // {periodLabel}
+                {periodLabel}
               </p>
             </div>
 
