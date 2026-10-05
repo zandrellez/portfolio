@@ -154,3 +154,961 @@ code {
   color: var(--text-h);
   border-radius: 4px;
 }
+
+/* =========================================================
+   IMMERSIVE HERO
+   ========================================================= */
+
+   body.hero-active .navbar-class {
+  display: none; /* Or opacity: 0, pointer-events: none for transitions */
+}
+
+.hero-scroll {
+  position: relative;
+  width: 100%;
+  height: 350vh;
+  overflow: clip;
+  background: var(--bg);
+}
+
+/* =========================================================
+   BACKGROUND GRID
+   ========================================================= */
+
+.hero-grid-layer {
+  position: absolute; /* Changed from sticky */
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.hero-grid-motion {
+  position: absolute;
+  inset: -20%; /* Brings the grid back onto the screen */
+  /* Mouse transform completely removed */
+}
+
+.hero-grid {
+  display: grid;
+  /* Restore exactly 5 columns to keep the masonry layout tight */
+  grid-template-columns: repeat(5, minmax(240px, 1fr)); 
+  grid-auto-rows: 180px;
+  gap: 20px;
+  
+  width: 150%;
+  min-height: 250%; /* Extra tall to support continuous scrolling */
+  
+  /* Steady, constant speed */
+  animation: heroGridDrift 20s linear infinite;
+}
+
+@keyframes heroGridDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Shifts EXACTLY 5 rows up (5 * 200px = 1000px). 
+       This creates a mathematically flawless, invisible loop! */
+    transform: translate3d(0, -1000px, 0); 
+  }
+}
+
+/* =========================================================
+   GRID CARDS
+   ========================================================= */
+
+.hero-grid-card {
+  position: relative;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  padding: 28px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 28px;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.12);
+
+  transition:
+    border-color 300ms ease,
+    transform 300ms ease;
+}
+
+.hero-grid-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.grid-card-wide {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.grid-card-tall {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.grid-card-small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.hero-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-family: var(--mono);
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: var(--muted);
+}
+
+.hero-grid-card h2 {
+  margin-top: 12px;
+
+  font-family: var(--sans);
+
+  font-size: clamp(22px, 2.2vw, 36px);
+
+  line-height: 1;
+
+  letter-spacing: -0.04em;
+
+  color: var(--text-h);
+}
+
+/* =========================================================
+   STICKY HERO
+   ========================================================= */
+
+.hero-sticky {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 10;
+
+  width: 100%;
+
+  height: 100svh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+/*
+ * IMPORTANT:
+ * No padding.
+ * No margins.
+ *
+ * This means the hero occupies the
+ * ENTIRE viewport initially.
+ */
+
+.hero-main-card {
+  position: relative;
+  z-index: 10; /* Add this to bring the green hero card back to the front */
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--accent);
+  transform-origin: center center;
+  will-change: transform;
+  pointer-events: auto;
+  isolation: isolate;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   HERO BACKGROUND
+   ========================================================= */
+
+.hero-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 20% 100%, rgba(0, 0, 0, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #93ab92 0%, #728c71 100%);
+}
+.hero-card-grid {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  opacity: 0.13;
+
+  background-image:
+    linear-gradient(
+      rgba(18, 18, 18, 0.45) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(18, 18, 18, 0.45) 1px,
+      transparent 1px
+    );
+
+  background-size: 50px 50px;
+}
+
+/* =========================================================
+   TOP LABEL
+   ========================================================= */
+
+.hero-top-label {
+  position: absolute;
+
+  top: 5vh;
+  left: 5vw;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  font-family: var(--mono);
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.24em;
+
+  color: #121212;
+}
+
+.hero-dot {
+  width: 9px;
+  height: 9px;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: #121212;
+}
+
+/* =========================================================
+   MAIN TEXT
+   ========================================================= */
+
+.hero-text-layer {
+  position: absolute;
+  left: 5vw;
+  top: 20vh;
+  z-index: 5;
+  transition: transform 0.08s linear;
+  will-change: transform;
+
+  /* New animation properties */
+opacity: 0;
+  animation: heroFadeSlideIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.hero-highlight {
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #fdfdf5; /* Creates a modern outlined text effect */
+  text-shadow: 0 4px 15px rgba(253, 253, 245, 0.15);
+}
+
+.hero-eyebrow {
+  margin-bottom: 24px;
+
+  font-family: var(--mono);
+
+  font-size: 10px;
+
+  letter-spacing: 0.25em;
+
+  color: rgba(18, 18, 18, 0.5);
+}
+
+.hero-text-layer h1 {
+  margin: 0;
+
+  max-width: 850px;
+
+  font-family: 'Syne', var(--sans);
+
+  font-size: clamp(
+    64px,
+    8vw,
+    142px
+  );
+
+  line-height: 0.87;
+
+  letter-spacing: -0.065em;
+
+  font-weight: 600;
+
+  color: #fdfdf5;
+}
+
+/* =========================================================
+   RIGHT INFORMATION
+   ========================================================= */
+
+.hero-info {
+  position: absolute;
+  top: 30vh;
+  right: 5vw;
+  z-index: 5;
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 180px;
+  text-align: right;
+  color: #fdfdf5;
+  opacity: 0;
+  animation: heroFadeSlideIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+.hero-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-info strong {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  color: #fdfdf5;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.hero-description {
+  position: absolute;
+  left: 5vw;
+  bottom: 7vh;
+  z-index: 5;
+  color: #fdfdf5;
+  opacity: 0;
+  animation: heroFadeSlideIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+}
+
+.hero-description p {
+  margin-top: 10px;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+
+  color: rgba(253, 253, 245, 0.8);
+}
+
+/* =========================================================
+   PORTRAIT
+   ========================================================= */
+
+.hero-portrait {
+  position: absolute;
+  right: 3vw;
+  bottom: 0;
+  z-index: 3;
+  width: min(52vw, 850px);
+  height: 92vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.08s linear;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.hero-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  user-select: none;
+  -webkit-user-drag: none;
+  
+  /* Image Entrance Animation */
+  opacity: 0;
+  transform-origin: bottom center;
+  animation: heroImageReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+/* =========================================================
+   SCROLL INDICATOR
+   ========================================================= */
+
+.hero-scroll-indicator {
+  position: absolute;
+
+  right: 4vw;
+
+  bottom: 5vh;
+
+  z-index: 20;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  font-family: var(--mono);
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: #121212;
+}
+
+.hero-scroll-indicator div {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid rgba(18, 18, 18, 0.4);
+
+  border-radius: 50%;
+
+  font-size: 17px;
+
+  transition:
+    transform 300ms ease,
+    background 300ms ease;
+}
+
+.hero-scroll-indicator:hover div {
+  transform: translateY(4px);
+
+  background: rgba(18, 18, 18, 0.08);
+}
+
+/* =========================================================
+   CORNER
+   ========================================================= */
+
+.hero-corner {
+  position: absolute;
+
+  top: 5vh;
+
+  right: 5vw;
+
+  z-index: 20;
+
+  font-family: var(--mono);
+
+  font-size: 9px;
+
+  letter-spacing: 0.2em;
+
+  color: rgba(18, 18, 18, 0.45);
+}
+
+/* =========================================================
+   MOCKUP — WORKFLOW
+   ========================================================= */
+
+.hero-workflow {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 35px;
+}
+
+.hero-node {
+  padding: 14px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  background: var(--surface-raised);
+
+  min-width: 80px;
+}
+
+.hero-node small {
+  display: block;
+
+  font-family: var(--mono);
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+
+  color: var(--muted);
+}
+
+.hero-node span {
+  display: block;
+
+  width: 40px;
+  height: 5px;
+
+  margin-top: 10px;
+
+  border-radius: 10px;
+
+  background: var(--accent);
+}
+
+.hero-line {
+  width: 25px;
+  height: 1px;
+
+  background: var(--border);
+}
+
+/* =========================================================
+   MOCKUP — OCR
+   ========================================================= */
+
+.hero-ocr {
+  margin-top: 25px;
+}
+
+.hero-ocr-document {
+  padding: 18px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 20px;
+
+  background: var(--surface-raised);
+}
+
+.hero-ocr-header,
+.hero-ocr-total,
+.hero-confidence {
+  display: flex;
+
+  justify-content: space-between;
+
+  font-family: var(--mono);
+
+  font-size: 8px;
+
+  letter-spacing: 0.12em;
+
+  color: var(--muted);
+}
+
+.hero-ocr-lines {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+  margin-top: 25px;
+}
+
+.hero-ocr-lines span {
+  height: 6px;
+
+  border-radius: 10px;
+
+  background: var(--border);
+}
+
+.hero-ocr-lines span:nth-child(2) {
+  width: 70%;
+}
+
+.hero-ocr-lines span:nth-child(3) {
+  width: 82%;
+}
+
+.hero-ocr-total {
+  margin-top: 30px;
+}
+
+.hero-ocr-total strong {
+  color: var(--text-h);
+}
+
+.hero-confidence {
+  margin-top: 12px;
+
+  padding: 0 4px;
+}
+
+/* =========================================================
+   MOCKUP — DASHBOARD
+   ========================================================= */
+
+.hero-dashboard {
+  margin-top: 28px;
+}
+
+.hero-stat-row {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+.hero-stat-row > div {
+  padding: 16px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  background: var(--surface-raised);
+}
+
+.hero-stat-row small {
+  display: block;
+
+  font-family: var(--mono);
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+
+  color: var(--muted);
+}
+
+.hero-stat-row strong {
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 20px;
+
+  color: var(--text-h);
+}
+
+.hero-chart {
+  height: 170px;
+
+  margin-top: 10px;
+
+  padding: 18px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 8px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 20px;
+
+  background: var(--surface-raised);
+}
+
+.hero-chart span {
+  flex: 1;
+
+  min-width: 0;
+
+  border-radius: 4px 4px 0 0;
+
+  background: var(--accent);
+}
+
+/* =========================================================
+   MOCKUP — CODE
+   ========================================================= */
+
+.hero-code {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-top: 25px;
+
+  padding: 18px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  background: var(--code-bg);
+
+  font-family: var(--mono);
+
+  font-size: 9px;
+
+  color: var(--muted);
+}
+
+/* =========================================================
+   MOCKUP — STATS
+   ========================================================= */
+
+.hero-stats {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 8px;
+
+  margin-top: 20px;
+}
+
+.hero-stats > div {
+  padding: 14px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  background: var(--surface-raised);
+}
+
+.hero-stats strong {
+  display: block;
+
+  font-size: 18px;
+
+  color: var(--text-h);
+}
+
+.hero-stats small {
+  display: block;
+
+  margin-top: 4px;
+
+  font-family: var(--mono);
+
+  font-size: 7px;
+
+  letter-spacing: 0.15em;
+
+  color: var(--muted);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .hero-scroll {
+    height: 230vh;
+  }
+
+  .hero-grid {
+    grid-template-columns:
+      repeat(2, minmax(180px, 1fr));
+
+    grid-auto-rows: 150px;
+
+    gap: 12px;
+
+    width: 150%;
+  }
+
+  .hero-grid-card {
+    padding: 18px;
+
+    border-radius: 20px;
+  }
+
+  .grid-card-wide {
+    grid-column: span 2;
+  }
+
+  .grid-card-tall {
+    grid-column: span 1;
+  }
+
+  .hero-main-card {
+    width: 100vw;
+
+    height: 100svh;
+
+    border-radius: 0;
+  }
+
+  .hero-top-label {
+    top: 28px;
+
+    left: 24px;
+
+    font-size: 8px;
+  }
+
+  .hero-text-layer {
+    left: 24px;
+
+    top: 17vh;
+
+    right: 24px;
+  }
+
+  .hero-eyebrow {
+    margin-bottom: 16px;
+
+    font-size: 8px;
+  }
+
+  .hero-text-layer h1 {
+    font-size: clamp(
+      48px,
+      14vw,
+      76px
+    );
+
+    line-height: 0.88;
+
+    letter-spacing: -0.055em;
+  }
+
+  .hero-info {
+    text-align: left;
+    top: 40vh;
+    left: 32px;
+    width: 145px;
+    gap: 20px;
+  }
+
+  .hero-info small {
+    font-size: 7px;
+  }
+
+  .hero-info strong {
+    font-size: 16px;
+  }
+
+  .hero-description {
+    left: 24px;
+    bottom: 28px;
+    max-width: 190px;
+    font-size: 14px;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8), 
+                 0px 0px 2px rgba(0, 0, 0, 1);
+  }
+
+  .hero-description p {
+    font-size: 14px;
+  }
+
+  .hero-portrait {
+    right: -36vw;
+    width: 150vw;
+    height: 55vh;
+    opacity: 0.95;
+  }
+
+  .hero-scroll-indicator {
+    right: 20px;
+
+    bottom: 28px;
+  }
+
+  .hero-scroll-indicator span {
+    display: none;
+  }
+
+  .hero-corner {
+    top: 28px;
+
+    right: 24px;
+
+    font-size: 7px;
+  }
+
+  .hero-workflow {
+    transform: scale(0.8);
+
+    transform-origin: left top;
+  }
+
+  .hero-stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-chart {
+    height: 120px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-grid {
+    animation: none;
+  }
+
+  .hero-grid-motion {
+    transition: none;
+  }
+
+  .hero-text-layer,
+  .hero-portrait {
+    transition: none;
+  }
+}
+
+@keyframes heroFadeSlideIn {
+  from {
+    opacity: 0;
+    margin-top: 40px; 
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+
+@keyframes heroImageReveal {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    transform: scale(1.08); /* Starts slightly zoomed in */
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: scale(1);
+    filter: blur(0);
+  }
+}

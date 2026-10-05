@@ -178,6 +178,19 @@ function FullscreenNav({
   children,
 }: FullscreenNavProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false); // NEW: Track scroll state
+
+  // NEW: Listen for scroll to hide/show the navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      // Reveal navbar after scrolling down 50 pixels (as the hero shrinks)
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initialize on mount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const overlayRef = useRef<HTMLElement | null>(null);
   const linksWrapperRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | gsap.core.Tween | null>(null);
@@ -307,7 +320,9 @@ function FullscreenNav({
     <div ref={rootRef}>
       {/* HEADER: w-full to prevent scrollbars, pointer-events-none to let you click through empty space */}
       <header 
-        className={`fixed top-0 left-0 right-0 z-70 flex h-24 items-center justify-between px-8 sm:px-12 pointer-events-none w-full ${headerClassName}`}
+        className={`fixed top-0 left-0 right-0 z-70 flex h-24 items-center justify-between px-8 sm:px-12 pointer-events-none w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isOpen || isScrolled ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
+        } ${headerClassName}`}
       >
         {/* LOGO: Completely hidden when closed, fades in when open */}
         <a

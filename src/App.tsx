@@ -5,10 +5,12 @@ import ImmersiveFullscreenNav from './components/ui/immersive-full-screen-nav'
 import AboutMe from './components/ui/about-me'
 import ProjectsSection from './components/ui/projects'
 import AllWorksSection from './components/ui/all-works'
+import ProjectDetail from "./components/ui/project-detail"
 import ServicesAndTools from './components/ui/services'
 import Processes from './components/ui/process'
 import CertificatesSection from './components/ui/certificates'
 import ContactSection from './components/ui/contact'
+import Hero from './components/ui/hero'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -35,6 +37,7 @@ function HomePage() {
 
   return (
     <main className="w-full">
+      <Hero />
       <MascotHero
         index="GMT+8"
         discipline={timeStr || "1:56 PM"}
@@ -116,6 +119,7 @@ function App() {
               </main>
             }
           />
+          <Route path="/works/:slug" element={<ProjectDetail />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </div>
