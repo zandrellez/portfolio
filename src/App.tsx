@@ -23,18 +23,6 @@ function ScrollToTop() {
 }
 
 function HomePage() {
-  const [timeStr, setTimeStr] = useState("")
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date()
-      setTimeStr(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }))
-    }
-    updateTime()
-    const timer = setInterval(updateTime, 1000)
-    return () => clearInterval(timer)
-  }, [])
-
   return (
     <main className="w-full">
       <Hero />
