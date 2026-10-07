@@ -48,21 +48,29 @@ export const toolsSection = {
   description: "The tools I use, and how each one fits into the bigger picture.",
 };
 
-/* -------------------------------------------------------------------------- */
-/* Tier 1 — the marquee (everyday, fluent tools)                              */
-/* -------------------------------------------------------------------------- */
-
-export const marqueeTools: MarqueeTool[] = [
+/* -------------------------------------------------------------------------- /
+/ Tier 1 — the marquee (everyday, fluent tools)                              /
+/ -------------------------------------------------------------------------- */
+export const marqueeToolsRow1: MarqueeTool[] = [
   { name: "JavaScript", slug: "javascript", color: "F7DF1E" },
   { name: "TypeScript", slug: "typescript", color: "3178C6" },
   { name: "React.js", slug: "react", color: "61DAFB" },
   { name: "React Native", slug: "react", color: "61DAFB" },
   { name: "Node.js", slug: "nodedotjs", color: "5FA04E" },
+  { name: "Next.js", slug: "nextdotjs", color: "000000" },
+  { name: "Tailwind CSS", slug: "tailwindcss", color: "06B6D4" },
+];
+
+export const marqueeToolsRow2: MarqueeTool[] = [
   { name: "PHP", slug: "php", color: "777BB4" },
+  { name: "Python", slug: "python", color: "3776AB" },
   { name: "SQL", slug: "mysql", color: "4479A1" },
   { name: "GitHub", slug: "github" },
   { name: "Figma", slug: "figma", color: "F24E1E" },
+  { name: "Docker", slug: "docker", color: "2496ED" },
+  { name: "Vercel", slug: "vercel", color: "000000" },
 ];
+
 
 /* -------------------------------------------------------------------------- */
 /* Tier 2 — conversational skill groups                                       */

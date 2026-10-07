@@ -1,5 +1,3 @@
-// services.ts
-
 export type TechFace = {
   name: string
   short: string
@@ -14,17 +12,18 @@ export type Service = {
   id: string
   title: string
   subtitle: string
+  pitch: string
   cube: TechFace[]
   slots: ServiceSlot[]
 }
 
 export const services: Service[] = [
   {
-    id: "full-stack",
-    title: "Full-Stack Engineering",
-    subtitle:
-      "Outcome-driven digital products that scale smoothly and feel effortless to use.",
-
+    id: "web-mobile",
+    title: "Full-Stack Applications",
+    subtitle: "Built for scale, secured by design",
+    pitch:
+      "I don't just build websites; I build tailored digital products that adapt to your users. Whether you need a customer-facing mobile app or a complex internal dashboard, I develop secure, role-based systems ensuring the right people see the right data at the right time.",
     cube: [
       { name: "JavaScript", short: "JS" },
       { name: "React", short: "RE" },
@@ -33,32 +32,30 @@ export const services: Service[] = [
       { name: "HTML / CSS", short: "WEB" },
       { name: "Git", short: "GIT" },
     ],
-
     slots: [
       {
-        title: "User-Centric Web Apps",
+        title: "Scalable Foundations",
         description:
-          "High-converting web and mobile interfaces that feel effortless to navigate, built around modular UI components and accessible design systems.",
+          "Apps architected to handle 10 users or 10,000 without performance drops.",
       },
       {
-        title: "High-Performance Backend Systems",
+        title: "Bulletproof Access Control",
         description:
-          "Zero-downtime application logic and data structures, engineered through structured API endpoints, secure authentication, and optimized schemas.",
+          "Role-based permissions (Admin, Manager, User) that protect sensitive data and ensure compliance.",
       },
       {
-        title: "Third-Party Integrations",
+        title: "Frictionless User Experience",
         description:
-          "Unified software ecosystems with zero data silos, created by connecting your core application directly to external services and platform APIs.",
+          "Fast, responsive interfaces that work seamlessly across web, iOS, and Android, keeping your users engaged.",
       },
     ],
   },
-
   {
-    id: "ai-automation",
-    title: "AI Automation",
-    subtitle:
-      "Intelligent automation pipelines that eliminate manual tasks and save hours of work.",
-
+    id: "workflow-automation",
+    title: "Workflow Automation",
+    subtitle: "Turning manual chaos into background magic",
+    pitch:
+      "I connect your existing tools, databases, and AI models to eliminate repetitive, manual tasks. Instead of your team copying data between spreadsheets or manually routing requests, I build smart systems that do the heavy lifting automatically.",
     cube: [
       { name: "Python", short: "PY" },
       { name: "OpenAI", short: "AI" },
@@ -67,48 +64,54 @@ export const services: Service[] = [
       { name: "ChatGPT", short: "GPT" },
       { name: "Claude", short: "CL" },
     ],
-
     slots: [
       {
-        title: "Automated Workflows",
+        title: "Hours Reclaimed Weekly",
         description:
-          "Hours of repetitive operational work saved daily, delivered through custom event-driven automation pipelines connecting your entire software stack.",
+          "Freeing your team from busywork so they can focus on high-value, strategic tasks.",
       },
       {
-        title: "Smart Data Extraction",
+        title: "Near-Zero Human Error",
         description:
-          "Instant conversion of messy files, emails, and PDFs into structured database records, powered by intelligent document parsing and language processing.",
+          "Automated data syncing and routing mean no more costly copy-paste mistakes or dropped leads.",
       },
       {
-        title: "Embedded AI Features",
+        title: "Proactive Operations",
         description:
-          "Smart, context-aware capabilities built into your web applications, enabled by integrating tailored language models and custom knowledge bases.",
+          "By weaving in AI (like auto-categorizing incoming requests or drafting smart responses), your workflows don't just run—they think.",
+      },
+    ],
+  },
+  {
+    id: "ai-integration",
+    title: "AI Integration",
+    subtitle: "Making your existing apps smarter",
+    pitch:
+      "Already have an app or website? I can embed intelligent features directly into your existing stack. From document parsing to smart search, I bridge the gap between standard software and cutting-edge AI.",
+    cube: [
+      { name: "Vector Search", short: "VEC" },
+      { name: "OCR / Parsing", short: "OCR" },
+      { name: "Voice AI", short: "STT" },
+      { name: "LLM Integration", short: "LLM" },
+      { name: "RAG Pipelines", short: "RAG" },
+      { name: "Smart Search", short: "AI" },
+    ],
+    slots: [
+      {
+        title: "Instant Insights",
+        description:
+          "Vector search and OCR integrations that let users find exactly what they need in seconds, not hours.",
+      },
+      {
+        title: "Enhanced Accessibility",
+        description:
+          "Voice-to-text (STT) and text-to-speech (TTS) features that make your product usable for everyone.",
+      },
+      {
+        title: "Competitive Edge",
+        description:
+          "Modernizing your legacy tools with AI capabilities that impress users and stakeholders alike.",
       },
     ],
   },
 ]
-
-export const marqueeTools = {
-  row1: [
-    "JavaScript",
-    "React",
-    "PHP",
-    "MySQL",
-    "Python",
-    "Supabase",
-    "Node.js",
-    "REST APIs",
-    "Zapier"
-  ],
-
-  row2: [
-    "n8n",
-    "OpenAI API",
-    "Git",
-    "GitHub",
-    "HTML5",
-    "CSS3",
-    "OCR",
-    "Figma",
-  ],
-}

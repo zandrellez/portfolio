@@ -1,15 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent } from "react";
-import { marqueeTools, toolCategories, toolsSection } from "../../data/tools";
+// 👇 Updated imports to use the two separate rows
+import { marqueeToolsRow1, marqueeToolsRow2, toolCategories, toolsSection } from "../../data/tools";
 import type { MarqueeTool, ToolCategory } from "../../data/tools";
 
-/* -------------------------------------------------------------------------- */
-/* Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
-
+/* -------------------------------------------------------------------------- /
+/ Helpers                                                                    /
+/ -------------------------------------------------------------------------- */
 const iconUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}`;
+const COMPACT_QUERY = "(max-width: 767px)";
 
-/** Positions for the bubbles that float around the panel (outside its edge). */
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const onChange = () => setMatches(mq.matches);
+    onChange();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [query]);
+  return matches;
+}
+
+const compactTail = (i: number) => `${[16.67, 50, 83.33, 33.33, 66.67][i] ?? 50}%`;
+
 const FLOATER_SLOTS = [
   { top: "-22px", right: "-18px", size: 56, delay: "0s" },
   { top: "26%", right: "-34px", size: 68, delay: "-1.4s" },
@@ -18,11 +34,10 @@ const FLOATER_SLOTS = [
   { bottom: "-20px", right: "22%", size: 44, delay: "-3.2s" },
 ] as const;
 
-/* -------------------------------------------------------------------------- */
-/* Marquee                                                                    */
-/* -------------------------------------------------------------------------- */
-
-const MARQUEE_COPIES = 4; // two copies = one full loop; four keeps ultrawide screens filled
+/* -------------------------------------------------------------------------- /
+/ Marquee                                                                    /
+/ -------------------------------------------------------------------------- */
+const MARQUEE_COPIES = 4; 
 
 function MarqueeRow({ tools, reverse = false }: { tools: MarqueeTool[]; reverse?: boolean }) {
   return (
@@ -52,13 +67,11 @@ function MarqueeRow({ tools, reverse = false }: { tools: MarqueeTool[]; reverse?
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Panel (angled container: mockup + skills + floating logos)                 */
-/* -------------------------------------------------------------------------- */
-
+/* -------------------------------------------------------------------------- /
+/ Panel (angled container: mockup + skills + floating logos)                 /
+/ -------------------------------------------------------------------------- */
 function Mockup({ category }: { category: ToolCategory }) {
   const [failed, setFailed] = useState(false);
-
   return (
     <figure className="tools-mockup">
       {!failed && (
@@ -81,7 +94,7 @@ function Panel({ category, index }: { category: ToolCategory; index: number }) {
       className="tools-panel"
       role="region"
       aria-label={`${category.title} skills`}
-      style={{ "--shift": index - 2 } as CSSProperties}
+      style={{ "--shift": index - 2, "--tail": compactTail(index) } as CSSProperties}
     >
       <div className="tools-panel-card">
         {category.floaters.slice(0, FLOATER_SLOTS.length).map((floater, i) => {
@@ -93,11 +106,10 @@ function Panel({ category, index }: { category: ToolCategory; index: number }) {
               title={floater.name}
               style={
                 {
-                  top: "top" in slot ? slot.top : undefined,
-                  bottom: "bottom" in slot ? slot.bottom : undefined,
-                  right: slot.right,
-                  width: slot.size,
-                  height: slot.size,
+                  "--ft": "top" in slot ? slot.top : "auto",
+                  "--fb": "bottom" in slot ? slot.bottom : "auto",
+                  "--fr": slot.right,
+                  "--fs": `${slot.size}px`,
                   animationDelay: slot.delay,
                 } as CSSProperties
               }
@@ -111,15 +123,11 @@ function Panel({ category, index }: { category: ToolCategory; index: number }) {
             </span>
           );
         })}
-
         <div className="tools-panel-body">
           <Mockup category={category} />
-
           <div className="tools-skills">
             <p className="subtitle-mono">{category.tagline}</p>
-            {/* On mobile the description lives here, since the icon row is too narrow */}
             <p className="tools-panel-quote">{category.description}</p>
-
             {category.groups.map((group) => (
               <div key={group.label} className="tools-group">
                 <h4>{group.label}</h4>
@@ -139,26 +147,25 @@ function Panel({ category, index }: { category: ToolCategory; index: number }) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Section                                                                    */
-/* -------------------------------------------------------------------------- */
-
+/* -------------------------------------------------------------------------- /
+/ Section                                                                    /
+/ -------------------------------------------------------------------------- */
 export default function Tools() {
   const [active, setActive] = useState<number | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const lastPointer = useRef<string>("mouse");
+  const compact = useMediaQuery(COMPACT_QUERY);
 
-  // Tap outside / Escape closes (needed for touch, where there is no hover-out)
+  const hoverEnabled = !compact;
+
   useEffect(() => {
     if (active === null) return;
-
     const onDown = (e: PointerEvent) => {
       if (!dockRef.current?.contains(e.target as Node)) setActive(null);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActive(null);
     };
-
     document.addEventListener("pointerdown", onDown);
     document.addEventListener("keydown", onKey);
     return () => {
@@ -167,15 +174,27 @@ export default function Tools() {
     };
   }, [active]);
 
+  useEffect(() => {
+    if (!compact || active === null) return;
+    const id = window.setTimeout(() => {
+      const panel = document.getElementById("tools-panel");
+      if (!panel) return;
+      const rect = panel.getBoundingClientRect();
+      const margin = 16;
+      if (rect.top < margin || rect.bottom > window.innerHeight - margin) {
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        panel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      }
+    }, 80);
+    return () => window.clearTimeout(id);
+  }, [active, compact]);
+
   const handleClick = (e: MouseEvent, i: number) => {
-    // Mouse: hover already opened it, so a click shouldn't close it again.
-    // Touch / pen / keyboard: click toggles.
-    const isMouse = lastPointer.current === "mouse" && e.detail > 0;
-    setActive((prev) => (isMouse ? i : prev === i ? null : i));
+    const hoverClick = hoverEnabled && lastPointer.current === "mouse" && e.detail > 0;
+    setActive((prev) => (hoverClick ? i : prev === i ? null : i));
   };
 
   const activeCategory = active !== null ? toolCategories[active] : null;
-  const row2 = [...marqueeTools.slice(4), ...marqueeTools.slice(0, 4)];
 
   return (
     <section
@@ -191,20 +210,20 @@ export default function Tools() {
         <p className="process-intro">{toolsSection.description}</p>
       </header>
 
+      {/* 👇 Now rendering the two distinct rows */}
       <div className="tools-marquee tools-dim" aria-label="Core technologies">
-        <MarqueeRow tools={marqueeTools} />
-        <MarqueeRow tools={row2} reverse />
+        <MarqueeRow tools={marqueeToolsRow1} />
+        <MarqueeRow tools={marqueeToolsRow2} reverse />
       </div>
 
       <div
         ref={dockRef}
         className="tools-dock"
         onPointerLeave={(e) => {
-          if (e.pointerType === "mouse") setActive(null);
+          if (hoverEnabled && e.pointerType === "mouse") setActive(null);
         }}
       >
         {activeCategory && <Panel key={activeCategory.id} category={activeCategory} index={active!} />}
-
         <ul className="tools-icons">
           {toolCategories.map((cat, i) => {
             const isActive = active === i;
@@ -214,7 +233,7 @@ export default function Tools() {
                 className={`tools-item${isActive ? " is-active" : " tools-dim"}`}
                 onPointerEnter={(e) => {
                   lastPointer.current = e.pointerType;
-                  if (e.pointerType === "mouse") setActive(i);
+                  if (hoverEnabled && e.pointerType === "mouse") setActive(i);
                 }}
               >
                 <button
