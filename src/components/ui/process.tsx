@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  type CSSProperties,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -10,7 +9,6 @@ import {
 } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 import {
   processMeta,
   processPhases,
@@ -18,24 +16,24 @@ import {
 } from "../../data/process";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-type SplitTextInstance = InstanceType<typeof SplitText>;
+// All styling lives in index.css (.process-* classes). Colors come from its
+// CSS variables (--accent, --surface, --border, ...), so dark mode works too.
 
 export type ProcessProps = {
   title?: string;
   periodLabel?: string;
+  intro?: string;
   phases?: ProcessPhase[];
-  imageUrl?: string;
-  imageAlt?: string;
-  textColor?: string;
-  mutedTextColor?: string;
-  activeColor?: string;
-  backgroundColor?: string;
-  duration?: number;
 };
 
+/** The line's tip sits at this fraction of the viewport height. */
+const ANCHOR = 0.6;
+/** Dash offset (in pathLength units) that keeps the line fully hidden. */
+const HIDDEN_OFFSET = 1.01;
+const DESKTOP_QUERY = "(min-width: 768px)";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 function subscribeToReducedMotion(callback: () => void) {
@@ -53,32 +51,69 @@ function usePrefersReducedMotion() {
   );
 }
 
-const LAYOUT_VARS = [
-  "[--pad:5vw] [--img:30vw] [--gap:5vw] [--lbl:30vw] [--p:22.5vw] [--w:28vw] [--end:10vw] [--t-left:0px] [--t-width:var(--lbl)]",
-  "max-md:[--pad:7vw] max-md:[--img:85vw] max-md:[--gap:15vw] max-md:[--lbl:0vw] max-md:[--p:65vw] max-md:[--w:75vw] max-md:[--end:20vw] max-md:[--t-left:calc(-1*(var(--img)+var(--gap)))] max-md:[--t-width:85vw]",
-].join(" ");
+type Point = { x: number; y: number };
+
+/** Deterministic pseudo-random in [0, 1): hand-drawn look that never changes between renders. */
+function rand(i: number, k: number) {
+  const s = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+/**
+ * Builds the line through every node.
+ * Desktop: loose S-curves swinging between left and right nodes.
+ * Mobile: a straight vertical line.
+ * Control points are ordered so the line only ever moves downward, which lets
+ * us map a screen y-position to "how much of the line is drawn".
+ */
+function buildPath(points: Point[], width: number, height: number, wide: boolean) {
+  if (points.length === 0) return "";
+
+  const first = points[0];
+  const last = points[points.length - 1];
+  const startY = Math.max(6, first.y - 110);
+  const endY = Math.min(height - 6, last.y + 110);
+
+  if (!wide) return `M ${first.x} ${startY} L ${first.x} ${endY}`;
+
+  const f = (n: number) => n.toFixed(1);
+
+  const segment = (a: Point, b: Point, i: number) => {
+    const dy = b.y - a.y;
+    const c1y = a.y + dy * (0.3 + 0.12 * rand(i, 1));
+    const c2y = a.y + dy * (0.58 + 0.12 * rand(i, 2));
+    const c1x = a.x + (rand(i, 3) - 0.5) * width * 0.07;
+    const c2x = b.x + (rand(i, 4) - 0.5) * width * 0.07;
+    return ` C ${f(c1x)} ${f(c1y)} ${f(c2x)} ${f(c2y)} ${f(b.x)} ${f(b.y)}`;
+  };
+
+  const center = width / 2;
+  let d = `M ${f(center)} ${f(startY)}`;
+  d += segment({ x: center, y: startY }, first, -1);
+  for (let i = 0; i < points.length - 1; i++) {
+    d += segment(points[i], points[i + 1], i);
+  }
+  d += segment(last, { x: center, y: endY }, points.length);
+  return d;
+}
 
 export default function Process({
   title = processMeta.title,
   periodLabel = processMeta.periodLabel,
+  intro = processMeta.intro,
   phases = processPhases,
-  imageUrl = processMeta.imageUrl,
-  imageAlt = processMeta.imageAlt,
-  textColor = "var(--text-h)",
-  mutedTextColor = "var(--text)",
-  activeColor = "var(--accent)",
-  backgroundColor = "var(--bg)",
-  duration = 1.2,
 }: ProcessProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const reducedMotion = usePrefersReducedMotion();
-  const normalizedDuration = Math.max(0.2, duration);
   const count = phases.length;
 
+  // Bumped when the layout may have changed (width change, fonts loaded) so the
+  // line is redrawn through the nodes' new positions.
   const [layoutKey, setLayoutKey] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
     let timeout: ReturnType<typeof setTimeout>;
     let lastWidth = window.innerWidth;
 
@@ -92,287 +127,253 @@ export default function Process({
     };
 
     window.addEventListener("resize", onResize);
+    document.fonts?.ready.then(() => {
+      if (!cancelled) setLayoutKey((k) => k + 1);
+    });
+
     return () => {
+      cancelled = true;
       clearTimeout(timeout);
       window.removeEventListener("resize", onResize);
     };
   }, []);
 
   useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const slider = sliderRef.current;
-    if (!section || !slider || count === 0) return;
+    const track = trackRef.current;
+    const svg = svgRef.current;
+    if (!track || !svg || count === 0) return;
 
-    const splits: SplitTextInstance[] = [];
+    const wide = window.matchMedia(DESKTOP_QUERY).matches;
+    const steps = Array.from(track.querySelectorAll<HTMLElement>("[data-step]"));
+    const drawPath = svg.querySelector<SVGPathElement>("[data-draw]");
+    const tip = svg.querySelector<SVGGElement>("[data-tip]");
 
     const ctx = gsap.context(() => {
-      const getDistance = () =>
-        Math.max(0, slider.offsetWidth - window.innerWidth);
+      // 1. Draw the route through the real node positions.
+      const width = track.offsetWidth;
+      const height = track.offsetHeight;
+      const trackRect = track.getBoundingClientRect();
 
-      const xInSlider = (el: Element) =>
-        el.getBoundingClientRect().left - slider.getBoundingClientRect().left;
+      const points = steps.map((step) => {
+        const r = step.querySelector("[data-node-wrap]")!.getBoundingClientRect();
+        return {
+          x: r.left + r.width / 2 - trackRect.left,
+          y: r.top + r.height / 2 - trackRect.top,
+        };
+      });
 
-      const sectionScroll = {
-        trigger: section,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        invalidateOnRefresh: true,
-      };
+      svg.setAttribute("width", String(width));
+      svg.setAttribute("height", String(height));
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
-      gsap.fromTo(
-        slider,
-        { x: 0 },
-        { x: () => -getDistance(), ease: "none", scrollTrigger: sectionScroll },
-      );
+      const d = buildPath(points, width, height, wide);
+      svg
+        .querySelectorAll<SVGPathElement>("[data-path]")
+        .forEach((p) => p.setAttribute("d", d));
 
-      if (reducedMotion) return;
+      if (reducedMotion) {
+        // Fully drawn and revealed, no scroll-linked motion.
+        steps.forEach((s) => s.classList.add("is-lit"));
+        return;
+      }
+      if (!drawPath || !tip) return;
 
-      const line = section.querySelector<HTMLElement>("[data-line]");
-      if (line) {
-        gsap.set(line, { transformOrigin: "0% 50%" });
-        gsap.fromTo(
-          line,
-          {
-            scaleX: () =>
-              gsap.utils.clamp(
-                0,
-                1,
-                (window.innerWidth * 0.55 - xInSlider(line)) / line.offsetWidth,
-              ),
-          },
-          { scaleX: 1, ease: "none", scrollTrigger: sectionScroll },
-        );
+      // 2. Map a y-position on the line to a 0..1 draw progress.
+      const total = drawPath.getTotalLength();
+      const SAMPLES = 240;
+      const ys = new Float32Array(SAMPLES + 1);
+      for (let k = 0; k <= SAMPLES; k++) {
+        ys[k] = drawPath.getPointAtLength((total * k) / SAMPLES).y;
       }
 
-      const d = normalizedDuration;
-      const items = gsap.utils.toArray<HTMLElement>("[data-phase]", section);
+      const progressForY = (y: number) => {
+        if (y <= ys[0]) return 0;
+        if (y >= ys[SAMPLES]) return 1;
+        let lo = 0;
+        let hi = SAMPLES;
+        while (hi - lo > 1) {
+          const mid = (lo + hi) >> 1;
+          if (ys[mid] <= y) lo = mid;
+          else hi = mid;
+        }
+        const t = (y - ys[lo]) / Math.max(1e-6, ys[hi] - ys[lo]);
+        return (lo + t) / SAMPLES;
+      };
 
-      items.forEach((item, index) => {
-        const isTop = index % 2 === 0;
-        const stem = item.querySelector("[data-stem]");
-        const dot = item.querySelector("[data-dot]");
-        const titleEl = item.querySelector("[data-title]");
-        const descEl = item.querySelector("[data-desc]");
-        if (!stem || !dot || !titleEl || !descEl) return;
+      // Progress at which the line's tip touches each node.
+      const thresholds = points.map((pt) => progressForY(pt.y) - 0.003);
 
-        gsap.set(stem, {
-          scaleY: 0,
-          transformOrigin: isTop ? "50% 100%" : "50% 0%",
-        });
-        gsap.set(dot, { scale: 0 });
+      // 3. One paused timeline per step: number pops in, card slides in.
+      const lit: boolean[] = steps.map(() => false);
+      const timelines = steps.map((step, i) => {
+        const dot = step.querySelector("[data-dot]");
+        const ring = step.querySelector("[data-ring]");
+        const card = step.querySelector("[data-card]");
+        const items = step.querySelectorAll("[data-item]");
+        const fromX = wide ? (i % 2 === 0 ? -50 : 50) : 40;
 
-        const titleSplit = new SplitText(titleEl, {
-          type: "lines",
-          mask: "lines",
-        });
-        const descSplit = new SplitText(descEl, {
-          type: "lines",
-          mask: "lines",
-        });
-        splits.push(titleSplit, descSplit);
-
-        const getRange = () => {
-          const distance = getDistance();
-          const vw = window.innerWidth;
-          const minSpan = window.innerHeight * 0.35;
-          const x = xInSlider(item);
-
-          let start = Math.max(0, x - vw * 0.85);
-          let end = Math.min(distance, Math.max(0, x - vw * 0.5));
-          end = Math.min(distance, Math.max(end, start + minSpan));
-          start = Math.max(0, Math.min(start, end - minSpan));
-
-          return { start: Math.round(start), end: Math.round(end) };
-        };
-
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: section,
-              start: () => `top+=${getRange().start} top`,
-              end: () => `top+=${getRange().end} top`,
-              scrub: true,
-            },
-            defaults: { ease: "none" },
-          })
-          .to(stem, { scaleY: 1, duration: d * 0.4 })
-          .to(dot, { scale: 1, duration: d * 0.4 }, "<")
+        return gsap
+          .timeline({ paused: true })
           .fromTo(
-            titleSplit.lines,
-            { yPercent: 110 },
-            {
-              yPercent: 0,
-              duration: d,
-              stagger: 0.02,
-              ease: "power2.out",
-            },
-            d * 0.2,
+            dot,
+            { opacity: 0, scale: 0.7 },
+            { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.8)" },
+            0,
           )
           .fromTo(
-            descSplit.lines,
-            { yPercent: 110 },
+            ring,
+            { opacity: 0.65, scale: 1 },
             {
-              yPercent: 0,
-              duration: d,
-              stagger: 0.02,
+              opacity: 0,
+              scale: 2.2,
+              duration: 0.9,
               ease: "power2.out",
+              immediateRender: false,
             },
-            "<",
+            0.05,
+          )
+          .fromTo(
+            card,
+            { opacity: 0, x: fromX },
+            { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+            0.12,
+          )
+          .fromTo(
+            items,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.07 },
+            0.3,
           );
       });
-    }, section);
+
+      const setLit = (i: number, on: boolean, instant: boolean) => {
+        steps[i].classList.toggle("is-lit", on);
+        const tl = timelines[i];
+        if (instant) tl.progress(on ? 1 : 0).pause();
+        else if (on) tl.timeScale(1).play();
+        else tl.timeScale(1.8).reverse();
+      };
+
+      // 4. Render the line from `proxy.p`. Numbers react to the line that is
+      //    actually on screen (not the raw scroll), so they pop exactly when
+      //    the tip touches them, even while the line is easing toward its target.
+      const proxy = { p: 0 };
+
+      const render = (instant = false) => {
+        const p = proxy.p;
+        drawPath.style.strokeDashoffset = String(HIDDEN_OFFSET * (1 - p));
+
+        const pt = drawPath.getPointAtLength(total * p);
+        tip.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+        tip.style.opacity = p > 0.003 && p < 0.997 ? "1" : "0";
+
+        steps.forEach((_, i) => {
+          const on = p >= thresholds[i];
+          if (on !== lit[i]) {
+            lit[i] = on;
+            setLit(i, on, instant);
+          }
+        });
+      };
+
+      const getTarget = () =>
+        progressForY(window.innerHeight * ANCHOR - track.getBoundingClientRect().top);
+
+      const jumpToTarget = () => {
+        gsap.killTweensOf(proxy);
+        proxy.p = getTarget();
+        render(true);
+      };
+
+      jumpToTarget();
+
+      ScrollTrigger.create({
+        trigger: track,
+        start: "top bottom",
+        end: "bottom top",
+        onUpdate: () => {
+          gsap.to(proxy, {
+            p: getTarget(),
+            duration: 0.5,
+            ease: "power3.out",
+            overwrite: true,
+            onUpdate: () => render(),
+          });
+        },
+        onRefresh: jumpToTarget,
+      });
+    }, track);
 
     return () => {
-      splits.forEach((split) => split.revert());
       ctx.revert();
+      steps.forEach((s) => s.classList.remove("is-lit"));
+      drawPath?.style.removeProperty("stroke-dashoffset");
+      tip?.style.removeProperty("opacity");
     };
-  }, [count, normalizedDuration, reducedMotion, layoutKey]);
-
-  const sectionStyle = {
-    backgroundColor,
-    "--total": `calc(var(--pad) * 2 + var(--img) + var(--gap) + var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
-    "--area": `calc(var(--lbl) + var(--p) * ${Math.max(count - 1, 0)} + var(--w) + var(--end))`,
-    height: "max(100vh, calc(100vh + var(--total) - 100vw))",
-  } as CSSProperties;
-
-  const activeStyle: CSSProperties = { backgroundColor: activeColor };
-  const titleStyle: CSSProperties = { color: textColor };
-  const mutedStyle: CSSProperties = { color: mutedTextColor };
+  }, [count, reducedMotion, layoutKey]);
 
   return (
-    <section
-      ref={sectionRef}
-      id="process"
-      className={`relative w-full border-t border-[var(--border)] ${LAYOUT_VARS}`}
-      style={sectionStyle}
-    >
-      <div className="sticky top-0 h-screen w-screen overflow-hidden pt-[10%] max-md:pt-[15%]">
-        <div
-          ref={sliderRef}
-          className="flex h-[30vw] items-center max-md:h-[65vh]"
-          style={{
-            width: "var(--total)",
-            paddingInline: "var(--pad)",
-            columnGap: "var(--gap)",
-          }}
-        >
-          {/* Main Image */}
-          <div className="h-full w-[var(--img)] shrink-0 overflow-hidden rounded-[1vw] max-md:h-[60vw] max-md:rounded-[5vw]">
-            <img
-              src={imageUrl}
-              alt={imageAlt}
-              draggable={false}
-              className="h-full w-full object-cover"
-            />
-          </div>
+    <section id="process" className="process-section">
+      <header className="process-header">
+        <span className="subtitle-mono">{periodLabel}</span>
+        <h2>{title}</h2>
+        {intro ? <p className="process-intro">{intro}</p> : null}
+      </header>
 
-          <div
-            className="relative h-full shrink-0"
-            style={{ width: "var(--area)" }}
-          >
-            {/* Horizontal Axis */}
-            <div className="absolute left-0 top-1/2 flex w-full -translate-y-1/2 items-center">
-              <div
-                className="size-[.8vw] shrink-0 rounded-full max-md:size-[2vw]"
-                style={activeStyle}
-              />
-              <div
-                data-line
-                className="h-px flex-1"
-                style={activeStyle}
-              />
-              <div
-                className="size-[.8vw] shrink-0 rounded-full max-md:size-[2vw]"
-                style={activeStyle}
-              />
-            </div>
+      <div ref={trackRef} className="process-track">
+        <svg ref={svgRef} className="process-svg" aria-hidden>
+          <path data-path className="process-guide" />
+          <path
+            data-path
+            data-draw
+            className="process-draw"
+            pathLength={1}
+            strokeDasharray="1 2"
+            strokeDashoffset={0}
+          />
+          <g data-tip className="process-tip">
+            <circle r={16} className="process-tip-glow" />
+            <circle r={5} className="process-tip-core" />
+          </g>
+        </svg>
 
+        {phases.map((phase, index) => {
+          const number = String(index + 1).padStart(2, "0");
+
+          return (
             <div
-              className="absolute top-0 md:h-1/2 pr-[3vw] pt-[2vw] max-md:pr-0 max-md:pt-0"
-              style={{ width: "var(--t-width)", left: "var(--t-left)" }}
+              key={`${index}-${phase.title}`}
+              data-step
+              className={`process-step ${index % 2 === 0 ? "is-left" : "is-right"}`}
             >
-              <h2 className="text-[2.6vw] font-bold leading-[0.95] max-md:text-[10vw]" style={titleStyle}>
-                {title}
-              </h2>
-              <p
-                className="mt-[1.5vw] text-[16px] tracking-widest max-md:mt-[3vw]"
-                style={mutedStyle}
-              >
-                {periodLabel}
-              </p>
-            </div>
-
-            {/* Alternating Phases */}
-            {phases.map((phase, index) => {
-              const isTop = index % 2 === 0;
-              const number = String(index + 1).padStart(2, "0");
-
-              return (
-                <div
-                  key={`${index}-${phase.title}`}
-                  data-phase
-                  className={`absolute h-1/2 ${isTop ? "top-0" : "bottom-0"}`}
-                  style={{
-                    left: `calc(var(--lbl) + var(--p) * ${index})`,
-                    width: "var(--w)",
-                  }}
-                >
-                  <div className="absolute inset-0 flex flex-col items-start">
-                    {isTop ? (
-                      <>
-                        <div
-                          data-dot
-                          className="-ml-[.5vw] size-[1vw] shrink-0 rounded-full max-md:-ml-[1.25vw] max-md:size-[2.5vw]"
-                          style={activeStyle}
-                        />
-                        <div
-                          data-stem
-                          className="w-px flex-1 rounded-full"
-                          style={activeStyle}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          data-stem
-                          className="w-px flex-1 rounded-full"
-                          style={activeStyle}
-                        />
-                        <div
-                          data-dot
-                          className="-ml-[.5vw] size-[1vw] shrink-0 rounded-full max-md:-ml-[1.25vw] max-md:size-[2.5vw]"
-                          style={activeStyle}
-                        />
-                      </>
-                    )}
-                  </div>
-
-                  <div
-                    className={`relative space-y-[1vw] pl-[3vw] pr-[1vw] max-md:space-y-[3vw] max-md:pl-[6vw] ${
-                      isTop ? "pt-[2vw] max-md:pt-[4vw]" : "flex h-full flex-col justify-end pb-[2vw] max-md:pb-[4vw]"
-                    }`}
-                  >
-                    <h4
-                      data-title
-                      className="text-[2.2vw] font-bold leading-tight max-md:text-[6.5vw]"
-                      style={titleStyle}
-                    >
-                      {number} <span style={{ opacity: 0.4 }}>&mdash;</span> {phase.title}
-                    </h4>
-                    <p
-                      data-desc
-                      className="w-[90%] text-[16px] leading-[1.6] max-md:text-[14px] max-md:w-full"
-                      style={mutedStyle}
-                    >
-                      {phase.description}
-                    </p>
-                  </div>
+              <div data-node-wrap className="process-node">
+                <span data-ring className="process-ring" />
+                <div data-dot className="process-dot">
+                  {index + 1}
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </div>
+
+              <div data-card className="process-card">
+                <article className="process-card-inner" data-index={number}>
+                  <span data-item className="subtitle-mono">
+                    Step {number}
+                  </span>
+                  <h3 data-item>{phase.title}</h3>
+                  <p data-item>{phase.description}</p>
+                  {phase.tags?.length ? (
+                    <ul data-item className="process-tags">
+                      {phase.tags.map((tag) => (
+                        <li key={tag} className="process-tag">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </article>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

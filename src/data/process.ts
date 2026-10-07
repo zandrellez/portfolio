@@ -1,41 +1,46 @@
 export type ProcessPhase = {
-  /** Shown after the auto-generated phase number, e.g. "01 - DISCOVERY". */
+  /** Step heading. The step number (01, 02, ...) is generated from the order. */
   title: string;
   description: string;
+  /** Optional small chips shown under the description. */
+  tags?: string[];
 };
 
 export const processMeta = {
-  title: "PROCESS",
-  periodLabel: "How I transform raw problems into production-ready software.",
-  imageUrl:
-    "https://cdn.21st.dev/assets/mirror/b0/b0c41784074f76ac5fb6b447da87780c901135841317a096241371f24bc13ddd.jpg",
-  imageAlt: "Developer workspace",
+  /** Small mono label above the title. */
+  periodLabel: "HOW I WORK",
+  title: "DEVELOPMENT PROCESS",
+  /** Optional line under the title. Set to "" to hide it. */
+  intro: "From the first conversation to a live product, every project moves through the same four steps.",
 };
 
+/**
+ * Add, remove or reorder steps freely. Numbering, the winding line, spacing
+ * and animations adapt to the count.
+ */
 export const processPhases: ProcessPhase[] = [
   {
-    title: "DISCOVER",
+    title: "Discover & Align",
     description:
-      "Uncovering core operational bottlenecks and defining the exact user value, branding, and outcome the project must achieve.",
+      "I start by listening. We’ll define your core pain points, project goals, and the exact brand value you want to deliver to your users.",
+    tags: ["Pain points", "Goals", "Brand value"],
   },
   {
-    title: "MAP",
+    title: "Architect & Map",
     description:
-      "Transforming requirements into structured user flows, wireframes, and database schemas before writing a single line of code.",
+      "Before writing code, I build the blueprint. I map out the features, user flows, wireframes, and database schemas so we have a clear, shared vision.",
+    tags: ["Features", "User flows", "Wireframes", "Schemas"],
   },
   {
-    title: "BUILD",
+    title: "Build & Automate",
     description:
-      "Rapidly engineering full-stack components and automation pipelines using modern AI workflows to ship production-grade code fast.",
+      "I develop your app or workflow using modern, scalable tech. I leverage AI tools strategically to code efficiently, integrate smart automations, and deliver features faster.",
+    tags: ["Scalable tech", "AI-assisted", "Automations"],
   },
   {
-    title: "TEST",
+    title: "Test, Polish & Deploy",
     description:
-      "Rigorously auditing user interface polish, edge cases, API reliability, and system performance to ensure zero friction.",
-  },  
-  {
-    title: "SHIP",
-    description:
-      "Launching production-ready systems paired with clean documentation and handover guides for seamless long-term maintenance.",
+      "I rigorously test for bugs, performance, and UI consistency. Finally, I provide clean documentation and handle the deployment, giving you a reliable, ready-to-use product.",
+    tags: ["Testing", "Documentation", "Deployment"],
   },
 ];

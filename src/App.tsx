@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
-import MascotHero from './components/ui/mascot-portfolio-hero'
 import ImmersiveFullscreenNav from './components/ui/immersive-full-screen-nav'
 import AboutMe from './components/ui/about-me'
 import ProjectsSection from './components/ui/projects'
@@ -11,6 +10,7 @@ import Processes from './components/ui/process'
 import CertificatesSection from './components/ui/certificates'
 import ContactSection from './components/ui/contact'
 import Hero from './components/ui/hero'
+import Tools from './components/ui/tools'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -38,29 +38,11 @@ function HomePage() {
   return (
     <main className="w-full">
       <Hero />
-      <MascotHero
-        index="GMT+8"
-        discipline={timeStr || "1:56 PM"}
-        tagline="engineering clarity out of complexity"
-        initials="ph"
-        year="2026"
-        badge="Open to Work"
-        line2="software"
-        line3="systems"
-        word="data"
-        verticalTag="Secure"
-        bracketed="AI"
-        seekingLabel="Focus"
-        seeking="Full-Stack & Automation"
-        services={[]}
-        accent="var(--accent)"
-        paper="var(--bg)"
-        ink="var(--text-h)"
-      />
       <AboutMe />
       <ProjectsSection />
       <ServicesAndTools />
       <Processes />
+      <Tools />
       <CertificatesSection />
       <ContactSection />
     </main>
