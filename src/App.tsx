@@ -13,11 +13,21 @@ import Hero from './components/ui/hero'
 import Tools from './components/ui/tools'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
+    if (hash) {
+      const target = document.querySelector(hash)
+      if (target) {
+        // Small delay to ensure landing DOM is mounted if routing from another page
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth' })
+        }, 60)
+        return
+      }
+    }
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, hash])
 
   return null
 }
@@ -37,7 +47,7 @@ function HomePage() {
   )
 }
 
-function App() {
+export default function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const savedTheme = window.localStorage.getItem("theme")
     if (savedTheme === "light" || savedTheme === "dark") return savedTheme
@@ -49,16 +59,17 @@ function App() {
     window.localStorage.setItem("theme", theme)
   }, [theme])
 
+  const resumeHref = `${import.meta.env.BASE_URL}resume.pdf`
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <div className="relative min-h-screen w-full m-0 p-0 bg-[var(--bg)] text-[var(--text)] overflow-x-clip">
-      <div className="fixed top-0 right-0 z-50 p-6">
         <ImmersiveFullscreenNav 
           theme={theme}
           onThemeToggle={() => setTheme((current) => current === "dark" ? "light" : "dark")}
           navConfig={{
-            brand: "",
+            brand: "ZOE ZAMORA.",
             overlayBg: "var(--nav-bg)",
             linkColor: "var(--nav-text)",
             linkHoverColor: "var(--accent)",
@@ -72,17 +83,16 @@ function App() {
             links: [
               { label: "Home", href: "/" },
               { label: "Work", href: "/all-works" },
-              { label: "About", href: "#" },
-              { label: "Resume", href: "#" },
+              { label: "Contact", href: "/#contact" },
+              { label: "Resume", href: resumeHref, external: true },
             ],
           }}
         />
-      </div>
 
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
-            path="/all-works"
+            path="/works"
             element={
               <main className="w-full">
                 <AllWorksSection />
@@ -96,5 +106,3 @@ function App() {
     </BrowserRouter>
   )
 }
-
-export default App

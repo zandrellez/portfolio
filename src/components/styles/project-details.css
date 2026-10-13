@@ -1,0 +1,512 @@
+/* =========================================================
+   PROJECT DETAILS (Matched coordinates with /all-works)
+   ========================================================= */
+
+.pd-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-h);
+  /* Matched exactly with all-works py-24 (6rem / 96px) */
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  overflow-x: clip;
+}
+
+/* Identical to all-works: max-w-6xl mx-auto px-6 */
+.pd-container {
+  width: 100%;
+  max-width: 1152px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* ---------- 1. Top Breadcrumbs Bar (Identical height & margin) ---------- */
+.pd-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  /* Matched exactly with all-works mb-12 (3rem / 48px) */
+  margin-bottom: 3rem;
+  min-height: 36px;
+}
+
+.pd-breadcrumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Matched with gap-2 */
+  font-family: var(--mono);
+  font-size: 14px; /* Matched with text-sm */
+  line-height: 1.5;
+  flex-wrap: wrap;
+}
+
+.pd-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 14px;
+  transition: color 200ms ease;
+}
+
+.pd-back-link:hover {
+  color: var(--text-h);
+}
+
+.pd-crumb-sep {
+  color: var(--border);
+  opacity: 0.6;
+  user-select: none;
+}
+
+.pd-crumb-current {
+  color: var(--text-h);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* Quick Action Buttons (Live Demo / GitHub) */
+.pd-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.pd-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-h);
+  font-size: 12px;
+  font-family: var(--mono);
+  text-decoration: none;
+  transition: all 200ms ease;
+}
+
+.pd-action-btn:hover {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+  transform: translateY(-1px);
+}
+
+.pd-action-btn--primary {
+  background: var(--text-h);
+  color: var(--bg);
+  border-color: var(--text-h);
+  font-weight: 600;
+}
+
+.pd-action-btn--primary:hover {
+  background: color-mix(in srgb, var(--text-h) 85%, var(--accent));
+  color: var(--bg);
+}
+
+/* Mobile: Ensure the breadcrumb doesn't shift down when actions wrap */
+@media (max-width: 639px) {
+  .pd-nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pd-crumb-current {
+    max-width: 180px;
+  }
+}
+
+/* ---------- 2. Hero Headline Area ---------- */
+.pd-hero-head {
+  margin-bottom: clamp(32px, 6vw, 56px);
+}
+
+.pd-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.pd-category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.pd-status-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.pd-status-badge--done {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.pd-status-badge--progress {
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  color: var(--warning);
+}
+
+.pd-title {
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: var(--text-h);
+}
+
+.pd-lead-text {
+  font-size: clamp(16px, 1.8vw, 20px);
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 760px;
+  margin: 0;
+}
+
+/* ---------- 3. Project At-A-Glance (Spec Grid) ---------- */
+.pd-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: clamp(40px, 7vw, 64px);
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+@media (min-width: 768px) {
+  .pd-specs-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 28px 36px;
+  }
+}
+
+.pd-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-spec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pd-spec-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-h);
+  letter-spacing: -0.01em;
+}
+
+.pd-spec-value--accent {
+  color: var(--accent);
+}
+
+/* ---------- 4. Showcase Browser Frame ---------- */
+.pd-mockup-wrapper {
+  position: relative;
+  margin-bottom: clamp(60px, 9vw, 100px);
+}
+
+.pd-mockup-frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.pd-browser-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+}
+
+.pd-browser-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pd-browser-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.pd-browser-dot:nth-child(1) { background: #ff5f56; opacity: 0.8; }
+.pd-browser-dot:nth-child(2) { background: #ffbd2e; opacity: 0.8; }
+.pd-browser-dot:nth-child(3) { background: #27c93f; opacity: 0.8; }
+
+.pd-browser-url {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.pd-mockup-body {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pd-mockup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pd-mockup-frame:hover .pd-mockup-img {
+  transform: scale(1.02);
+}
+
+/* ---------- 5. Editorial Two-Column Deep Dive ---------- */
+.pd-editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  margin-bottom: clamp(64px, 10vw, 120px);
+}
+
+@media (min-width: 992px) {
+  .pd-editorial-grid {
+    grid-template-columns: 300px 1fr;
+    gap: 72px;
+  }
+}
+
+/* Sticky Sidebar */
+.pd-sidebar {
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .pd-sidebar {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+  }
+}
+
+.pd-sidebar-block {
+  margin-bottom: 32px;
+}
+
+.pd-sidebar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: block;
+}
+
+.pd-stack-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pd-stack-pill {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-h);
+}
+
+/* Narrative Content */
+.pd-narrative {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 56px);
+}
+
+.pd-block h3 {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: var(--text-h);
+}
+
+.pd-block p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Bulleted Highlights List */
+.pd-highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.pd-highlight-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 9px;
+  flex-shrink: 0;
+}
+
+/* Architecture Card List */
+.pd-arch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pd-arch-card {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-h);
+}
+
+/* ---------- 6. Previous / Next Project Rail ---------- */
+.pd-bottom-rail {
+  border-top: 1px solid var(--border);
+  padding-top: clamp(40px, 6vw, 64px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .pd-bottom-rail {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.pd-rail-card {
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 250ms ease;
+}
+
+.pd-rail-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--surface-raised);
+}
+
+.pd-rail-direction {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pd-rail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-h);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pd-rail-card:hover .pd-rail-title {
+  color: var(--accent);
+}
+
+/* ---------- Mobile Adjustments ---------- */
+@media (max-width: 639px) {
+  .pd-nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pd-quick-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .pd-crumb-current {
+    max-width: 160px;
+  }
+
+  .pd-specs-grid {
+    padding: 18px;
+  }
+}

@@ -1,186 +1,254 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useParams, Link, Navigate } from "react-router-dom"
-import { projects } from "../../data/projects"
+import * as React from "react";
+import { useParams, Link, Navigate } from "react-router-dom";
+import { projects } from "../../data/projects";
+import "../styles/project-details.css";
 
-// Native SVGs to avoid lucide-react export issues
-const ArrowLeftIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M19 12H5M12 19l-7-7 7-7"/>
-  </svg>
-)
-
-const ExternalLinkIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M7 17l9.2-9.2M17 17V7H7"/>
-  </svg>
-)
-
-const GithubIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-    <path d="M9 18c-4.51 2-5-2-7-2"/>
-  </svg>
-)
+// Helper to resolve images on both local dev and GitHub Pages base paths
+function resolveAssetUrl(url?: string): string {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
+    return url;
+  }
+  return `${import.meta.env.BASE_URL}${url.replace(/^\//, "")}`;
+}
 
 export default function ProjectDetail() {
-  // Grab the slug from the URL (e.g., /works/bazaarx -> slug = "bazaarx")
-  const { slug } = useParams<{ slug: string }>()
-  
-  // Find the matching project in your data
-  const project = projects.find(p => p.slug === slug)
+  const { slug } = useParams<{ slug: string }>();
 
-  // Automatically scroll to top when the page loads
+  // Find project by slug
+  const projectIndex = projects.findIndex((p) => p.slug === slug);
+  const project = projects[projectIndex];
+
+  // Scroll to top upon project change
   React.useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [slug])
+    window.scrollTo(0, 0);
+  }, [slug]);
 
-  // If someone types a random URL, redirect them back to all works
+  // If project is not found, safely redirect back to all-works
   if (!project) {
-    return <Navigate to="/all-works" replace />
+    return <Navigate to="/all-works" replace />;
   }
 
+  // Calculate circular Previous and Next projects
+  const prevProject =
+    projects[(projectIndex - 1 + projects.length) % projects.length];
+  const nextProject = projects[(projectIndex + 1) % projects.length];
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] selection:bg-[var(--accent)] selection:text-[var(--bg)] pb-32">
-      
-      {/* 1. TOP NAVIGATION */}
-      <div className="w-full border-b border-[var(--border)] bg-[var(--bg)] sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link 
-            to="/all-works" 
-            className="group flex items-center gap-2 text-sm font-mono text-[var(--muted)] hover:text-[var(--text-h)] transition-colors"
-          >
-            <span className="group-hover:-translate-x-1 transition-transform">
-              <ArrowLeftIcon />
-            </span>
-            Back to Directory
-          </Link>
-          
-          <span className="text-[10px] font-mono tracking-widest uppercase text-[var(--muted)] hidden sm:block">
-            Project Case Study
-          </span>
-        </div>
-      </div>
-
-      {/* 2. PROJECT HERO HEADER */}
-      <header className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-12">
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold uppercase border ${
-            project.status === 'Completed' 
-              ? 'bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent)]' 
-              : 'bg-[color-mix(in_srgb,var(--warning)_10%,transparent)] text-[var(--warning)] border-[var(--warning)]'
-          }`}>
-            {project.status}
-          </span>
-          {project.categories.map(cat => (
-            <span key={cat} className="px-3 py-1 rounded-full text-xs font-mono border border-[var(--border)] bg-[var(--surface)] text-[var(--text)]">
-              {cat}
-            </span>
-          ))}
-        </div>
-
-        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-[var(--text-h)] tracking-tighter mb-8 max-w-4xl leading-[1.05]">
-          {project.title}
-        </h1>
-
-        <div className="flex flex-wrap items-center gap-4">
-          {project.links?.live && project.links.live !== "#" && (
-            <a 
-              href={project.links.live} 
-              target="_blank" 
-              rel="noreferrer"
-              className="group flex items-center gap-2 bg-[var(--text-h)] text-[var(--bg)] px-6 py-3 rounded-full text-sm font-bold hover:bg-[var(--accent)] transition-colors shadow-lg"
-            >
-              Visit Live Site
-              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                <ExternalLinkIcon />
-              </span>
-            </a>
-          )}
-          
-          {project.links?.github && project.links.github !== "#" && (
-            <a 
-              href={project.links.github} 
-              target="_blank" 
-              rel="noreferrer"
-              className="group flex items-center gap-2 bg-[var(--surface)] border border-[var(--border)] text-[var(--text-h)] px-6 py-3 rounded-full text-sm font-bold hover:border-[var(--accent)] transition-colors"
-            >
-              View Repository
-              <GithubIcon />
-            </a>
-          )}
-        </div>
-      </header>
-
-      {/* 3. HERO IMAGE */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-20 md:mb-32">
-        <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-[var(--surface-raised)] border border-[var(--border)] rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl p-2 md:p-4">
-          <img 
-            src={project.image} 
-            alt={`${project.title} preview`} 
-            className="w-full h-full object-cover rounded-xl md:rounded-[1.5rem]"
-          />
-        </div>
-      </div>
-
-      {/* 4. CONTENT SPLIT (Overview & Tech Stack) */}
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
+    <article className="pd-section">
+      <div className="pd-container">
         
-        {/* Left Column: The Story / Overview */}
-        <div className="md:col-span-8 flex flex-col gap-8">
-          <div>
-            <h2 className="text-xs font-mono tracking-[0.25em] uppercase text-[var(--accent)] mb-6 flex items-center gap-4">
-              <span className="w-8 h-px bg-[var(--accent)]"></span>
-              Project Overview
-            </h2>
-            <p className="text-lg md:text-2xl text-[var(--text-h)] leading-relaxed font-medium">
-              {project.description}
-            </p>
+        {/* 1. TOP BREADCRUMBS BAR (Aligned with /all-works) */}
+        <nav className="pd-nav-bar" aria-label="Breadcrumb navigation">
+          <div className="pd-breadcrumbs">
+            <Link to="/works" className="pd-back-link">
+              <span aria-hidden="true">←</span> Works
+            </Link>
+            <span className="pd-crumb-sep" aria-hidden="true">/</span>
+            <span className="pd-crumb-current">{project.title}</span>
           </div>
 
-          {/* Optional: If you ever add a 'longDescription' to your projects.ts, put it here! */}
-          {/* <p className="text-base text-[var(--text)] leading-loose">
-            {project.longDescription}
-          </p> */}
+          <div className="pd-quick-actions">
+            {project.links?.live && project.links.live !== "#" && (
+              <a
+                href={project.links.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pd-action-btn pd-action-btn--primary"
+              >
+                <span>Live Demo</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            )}
+            {project.links?.github && project.links.github !== "#" && (
+              <a
+                href={project.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pd-action-btn"
+              >
+                <span>GitHub</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        </nav>
+
+        {/* 2. HERO HEADLINE & PITCH */}
+        <header className="pd-hero-head">
+          <div className="pd-meta-row">
+            <span className="pd-category-badge">
+              {project.categories[0] ?? "System"}
+            </span>
+            <span
+              className={`pd-status-badge ${
+                project.status === "Completed"
+                  ? "pd-status-badge--done"
+                  : "pd-status-badge--progress"
+              }`}
+            >
+              {project.status}
+            </span>
+          </div>
+
+          <h1 className="pd-title">{project.title}</h1>
+          <p className="pd-lead-text">{project.description}</p>
+        </header>
+
+        {/* 3. AT-A-GLANCE (SPEC GRID) */}
+        <section className="pd-specs-grid" aria-label="Project details summary">
+          <div className="pd-spec-item">
+            <span className="pd-spec-label">Role</span>
+            <span className="pd-spec-value">
+              {project.role ?? "Full-Stack Development"}
+            </span>
+          </div>
+          <div className="pd-spec-item">
+            <span className="pd-spec-label">Timeline</span>
+            <span className="pd-spec-value">
+              {project.timeline ?? "2025 – 2026"}
+            </span>
+          </div>
+          <div className="pd-spec-item">
+            <span className="pd-spec-label">Platform</span>
+            <span className="pd-spec-value">
+              {project.categories.slice(0, 2).join(" · ")}
+            </span>
+          </div>
+          <div className="pd-spec-item">
+            <span className="pd-spec-label">
+              {project.metric?.label ?? "Core Metric"}
+            </span>
+            <span className="pd-spec-value pd-spec-value--accent">
+              {project.metric?.value ?? "Production Ready"}
+            </span>
+          </div>
+        </section>
+
+        {/* 4. MOCKUP HERO SHOWCASE */}
+        <div className="pd-mockup-wrapper">
+          <div className="pd-mockup-frame">
+            <div className="pd-browser-bar">
+              <div className="pd-browser-dots" aria-hidden="true">
+                <span className="pd-browser-dot" />
+                <span className="pd-browser-dot" />
+                <span className="pd-browser-dot" />
+              </div>
+              <span className="pd-browser-url">
+                github.com/zandrellez/{project.slug}
+              </span>
+              <div style={{ width: 40 }} aria-hidden="true" />
+            </div>
+
+            <div className="pd-mockup-body">
+              <img
+                src={resolveAssetUrl(project.image)}
+                alt={`${project.title} preview screenshot`}
+                className="pd-mockup-img"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Right Column: Meta Details & Tech Stack */}
-        <div className="md:col-span-4 flex flex-col gap-10">
+        {/* 5. EDITORIAL TWO-COLUMN BREAKDOWN */}
+        <div className="pd-editorial-grid">
           
-          {/* Tech Stack */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8">
-            <h3 className="text-xs font-mono tracking-widest uppercase text-[var(--muted)] mb-6">
-              Technologies Used
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map(tech => (
-                <span 
-                  key={tech} 
-                  className="bg-[var(--bg)] border border-[var(--border)] text-[var(--text-h)] px-3 py-1.5 rounded-lg text-xs font-mono font-medium"
-                >
-                  {tech}
-                </span>
-              ))}
+          {/* Left Column (Sticky Sidebar Context) */}
+          <aside className="pd-sidebar">
+            <div className="pd-sidebar-block">
+              <span className="pd-sidebar-label">Technologies</span>
+              <div className="pd-stack-pills">
+                {project.techStack.map((tech) => (
+                  <span key={tech} className="pd-stack-pill">
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Quick Stats / Meta */}
-          <div className="flex flex-col gap-4 border-t border-[var(--border)] pt-8">
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--muted)]">Role</span>
-              <span className="text-sm font-medium text-[var(--text-h)]">Full-Stack Dev</span>
+            <div className="pd-sidebar-block">
+              <span className="pd-sidebar-label">Domains</span>
+              <div className="pd-stack-pills">
+                {project.categories.map((cat) => (
+                  <span key={cat} className="pd-stack-pill">
+                    {cat}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-mono tracking-widest uppercase text-[var(--muted)]">Type</span>
-              <span className="text-sm font-medium text-[var(--text-h)]">{project.categories[0]}</span>
-            </div>
-          </div>
+          </aside>
 
+          {/* Right Column (Narrative Case Study) */}
+          <main className="pd-narrative">
+            {/* The Challenge / Friction */}
+            <section className="pd-block">
+              <h3>The Challenge</h3>
+              <p>
+                {project.problem ??
+                  "Repetitive, manual steps and inefficient data processing often compromise the user experience. The goal was to eliminate this friction through intuitive design and reliable background engineering."}
+              </p>
+            </section>
+
+            {/* The Architecture / Solution */}
+            <section className="pd-block">
+              <h3>The Solution & Architecture</h3>
+              <p>
+                {project.solution ??
+                  "Engineered a resilient full-stack architecture that automates dense tasks and delivers predictable performance. Every layer is structured to minimize latency and provide effortless user interactions."}
+              </p>
+            </section>
+
+            {/* Key Highlights */}
+            {project.highlights && project.highlights.length > 0 && (
+              <section className="pd-block">
+                <h3>Key Highlights</h3>
+                <ul className="pd-highlights-list">
+                  {project.highlights.map((highlight, idx) => (
+                    <li key={idx} className="pd-highlight-item">
+                      <span className="pd-highlight-dot" aria-hidden="true" />
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Architecture List */}
+            {project.architecture && project.architecture.length > 0 && (
+              <section className="pd-block">
+                <h3>Technical Breakdown</h3>
+                <div className="pd-arch-list">
+                  {project.architecture.map((arch, idx) => (
+                    <div key={idx} className="pd-arch-card">
+                      {arch}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </main>
         </div>
+
+        {/* 6. PREVIOUS / NEXT PROJECT RAIL */}
+        <footer className="pd-bottom-rail">
+          <Link to={`/works/${prevProject.slug}`} className="pd-rail-card">
+            <span className="pd-rail-direction">← Previous Project</span>
+            <span className="pd-rail-title">{prevProject.title}</span>
+          </Link>
+
+          <Link
+            to={`/works/${nextProject.slug}`}
+            className="pd-rail-card"
+            style={{ textAlign: "right", alignItems: "flex-end" }}
+          >
+            <span className="pd-rail-direction">Next Project →</span>
+            <span className="pd-rail-title">{nextProject.title}</span>
+          </Link>
+        </footer>
 
       </div>
-
-    </div>
-  )
+    </article>
+  );
 }

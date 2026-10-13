@@ -14,6 +14,7 @@ import {
   processPhases,
   type ProcessPhase,
 } from "../../data/process";
+import "../styles/process.css";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
