@@ -155,7 +155,7 @@ export default function ProjectsSection() {
             <div className="hidden md:flex items-end gap-1 flex-1">
               {/* Pinned View All Tab (Narrow) */}
               <Link
-                to="/all-works"
+                to="/works"
                 className="min-w-[100px] max-w-[120px] px-3 py-2 rounded-t-lg flex items-center gap-2 text-xs transition-colors border-r border-[var(--contrast-border)] bg-[var(--contrast-surface-raised)] text-[var(--contrast-accent)] hover:bg-[var(--contrast-surface)]"
               >
                 <span>📁</span>
@@ -186,7 +186,7 @@ export default function ProjectsSection() {
             {/* MOBILE Tabs (Pinned View All + Wider Active Tab) */}
             <div className="flex md:hidden items-end flex-1 gap-1">
               <Link
-                to="/all-works"
+                to="/works"
                 className="min-w-[90px] px-3 py-2 rounded-t-lg flex items-center gap-1.5 text-xs bg-[var(--contrast-surface-raised)] text-[var(--contrast-accent)] border-t border-x border-[var(--contrast-border)]"
               >
                 <span>📁</span>

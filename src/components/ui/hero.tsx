@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import "../styles/hero.css"
 
 type GridCard = {
   title: string

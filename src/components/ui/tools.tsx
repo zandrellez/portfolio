@@ -3,6 +3,7 @@ import type { CSSProperties, MouseEvent } from "react";
 // 👇 Updated imports to use the two separate rows
 import { marqueeToolsRow1, marqueeToolsRow2, toolCategories, toolsSection } from "../../data/tools";
 import type { MarqueeTool, ToolCategory } from "../../data/tools";
+import "../styles/tools.css";
 
 /* -------------------------------------------------------------------------- /
 / Helpers                                                                    /
